@@ -1,0 +1,25 @@
+base:
+  random_state: 42
+  root_project_dir: '/mnt/c/Jupyter-projects/mag_ML'
+
+data:
+  raw_dataset_csv: 'data/raw/insurance.csv'
+  features_path: 'data/processed/featured_insurance.csv'
+  test_size: 0.2
+  dataset_x_path: 'data/processed/data_x.npy'
+  dataset_y_path: 'data/processed/data_y.npy'
+
+reports:
+  report_path: 'reports/metrics.json'
+  ydata_report_path: 'reports/ydata_report.html'
+  
+train:
+  estimator: 'RandomForestRegressor'
+  reg_params:
+    'n_estimators': 100
+    'max_depth': 10
+    'random_state': 42
+  cv: 3
+  max_iter: 100
+  model_path: 'models/model.joblib'
+

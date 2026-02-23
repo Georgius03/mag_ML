@@ -7,7 +7,7 @@ catboost_info/
 
 data/processed/*.csv
 dvc_storage/
-reports/*.html
+reports/
 
 *.log
 

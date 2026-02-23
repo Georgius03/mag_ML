@@ -3,8 +3,9 @@ import pandas as pd
 import numpy as np
 
 from typing import Tuple
-from sklearn.linear_model import LinearRegression
+from sklearn.tree import DecisionTreeRegressor, plot_tree
 from sklearn.metrics import root_mean_squared_error, mean_absolute_error, r2_score
+import matplotlib.pyplot as plt
 from dvclive import Live
 
 
@@ -24,15 +25,15 @@ def main() -> None:
     y_train_log = np.log1p(y_train)
 
     # Load model params
-    params = config['models']['linear']
+    params = config['models']['decision_tree']
     
     # Initialize model
-    model = LinearRegression(**params)
+    model = DecisionTreeRegressor(**params)
 
-    with Live(dir="dvclive/linear") as live:
+    with Live(dir="dvclive/decision_tree") as live:
 
         # Log parameters
-        live.log_param("model", "LinearRegression")
+        live.log_param("model", "DecisionTreeRegressor")
         for param, value in params.items():
             live.log_param(param, value)
 
@@ -48,14 +49,17 @@ def main() -> None:
         for metric, value in metrics.items():
             live.log_metric(f"test/{metric}", value)
 
-        # Log coefficients
-        coef = model.coef_
-        for i, value in enumerate(coef):
-            live.log_metric(f"coef_{i}", float(value), plot=False)
+        # Save tree plot
+        os.makedirs("reports/figures", exist_ok=True)
+        plt.figure(figsize=(12, 6))
+        
+        plot_tree(model, max_depth=2, filled=True)
+        plt.savefig("reports/figures/decision_tree_structure.png")
+        plt.close()
 
     # Save model
     os.makedirs(config['models']['models_path'], exist_ok=True)
-    joblib.dump(model, config['models']['models_path'] + "linear.pkl")
+    joblib.dump(model, config['models']['models_path'] + "decision_tree.pkl")
 
 
 def load_data(

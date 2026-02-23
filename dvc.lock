@@ -1,0 +1,202 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python src/data/make_dataset.py
+    deps:
+    - path: config/params.yaml
+      hash: md5
+      md5: 8a83ace04b6508949d5a1dab8126caf6
+      size: 1185
+      isexec: true
+    - path: data/raw/insurance.csv
+      hash: md5
+      md5: fab0de8ef9286cf3ff04e96d0393a771
+      size: 50514
+      isexec: true
+    - path: src/data/make_dataset.py
+      hash: md5
+      md5: 46829799253f6473b3cf3cded13f613f
+      size: 2414
+      isexec: true
+    outs:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: e2e4a886b947647f0bc0e53783437382
+      size: 20469
+      isexec: true
+    - path: data/processed/train.csv
+      hash: md5
+      md5: b0affc53ed388acdce2e337ac6d84beb
+      size: 81353
+      isexec: true
+  train_linear:
+    cmd: python src/models/train_linear.py
+    deps:
+    - path: config/params.yaml
+      hash: md5
+      md5: 8a83ace04b6508949d5a1dab8126caf6
+      size: 1185
+      isexec: true
+    - path: data/processed/test.csv
+      hash: md5
+      md5: e2e4a886b947647f0bc0e53783437382
+      size: 20469
+      isexec: true
+    - path: data/processed/train.csv
+      hash: md5
+      md5: b0affc53ed388acdce2e337ac6d84beb
+      size: 81353
+      isexec: true
+    - path: src/models/train_linear.py
+      hash: md5
+      md5: 9c945060dd4932323badd83376936d12
+      size: 2489
+      isexec: true
+    outs:
+    - path: dvclive/linear/metrics.json
+      hash: md5
+      md5: 37fcb492fbdd6ec980266662690a95c2
+      size: 518
+      isexec: true
+    - path: dvclive/linear/plots
+      hash: md5
+      md5: d235a1c9355d09642c895cd3145c72a1.dir
+      size: 88
+      nfiles: 3
+    - path: models/linear.pkl
+      hash: md5
+      md5: b2f7766550a9deacf08791bee12a1d6a
+      size: 1201
+      isexec: true
+  train_decision_tree:
+    cmd: python src/models/train_decision_tree.py
+    deps:
+    - path: config/params.yaml
+      hash: md5
+      md5: 8a83ace04b6508949d5a1dab8126caf6
+      size: 1185
+      isexec: true
+    - path: data/processed/test.csv
+      hash: md5
+      md5: e2e4a886b947647f0bc0e53783437382
+      size: 20469
+      isexec: true
+    - path: data/processed/train.csv
+      hash: md5
+      md5: b0affc53ed388acdce2e337ac6d84beb
+      size: 81353
+      isexec: true
+    - path: src/models/train_decision_tree.py
+      hash: md5
+      md5: b5a259c7dbbd42a6530836b846287c78
+      size: 2660
+      isexec: true
+    outs:
+    - path: dvclive/decision_tree/metrics.json
+      hash: md5
+      md5: 79e3f03a596527d9ff7b25901db53d3a
+      size: 126
+      isexec: true
+    - path: dvclive/decision_tree/plots
+      hash: md5
+      md5: f84d4143e6a158998259f899cb40bae1.dir
+      size: 88
+      nfiles: 3
+    - path: models/decision_tree.pkl
+      hash: md5
+      md5: 08660f53ff93e4aac3845177e7576e44
+      size: 6049
+      isexec: true
+    - path: reports/figures/decision_tree_structure.png
+      hash: md5
+      md5: 5e52ef2191e621f675b72ec29ba8ee84
+      size: 53398
+      isexec: true
+  train_catboost:
+    cmd: python src/models/train_catboost.py
+    deps:
+    - path: config/params.yaml
+      hash: md5
+      md5: 8a83ace04b6508949d5a1dab8126caf6
+      size: 1185
+      isexec: true
+    - path: data/processed/test.csv
+      hash: md5
+      md5: e2e4a886b947647f0bc0e53783437382
+      size: 20469
+      isexec: true
+    - path: data/processed/train.csv
+      hash: md5
+      md5: b0affc53ed388acdce2e337ac6d84beb
+      size: 81353
+      isexec: true
+    - path: src/models/train_catboost.py
+      hash: md5
+      md5: 41dc1a24eab733c0a33c9749bf9c1eeb
+      size: 2635
+      isexec: true
+    outs:
+    - path: dvclive/catboost/metrics.json
+      hash: md5
+      md5: 74d0b3ea4161878d4bb457b4ba90ce30
+      size: 126
+      isexec: true
+    - path: dvclive/catboost/plots
+      hash: md5
+      md5: a93fe4d9733c3cfaa72d55d5940d16f5.dir
+      size: 88
+      nfiles: 3
+    - path: models/catboost.cbm
+      hash: md5
+      md5: 19c678738ea81e027bc3c74cc90400da
+      size: 325840
+      isexec: true
+    - path: reports/figures/catboost_feature_importance.png
+      hash: md5
+      md5: 2e774e724a81747f5f671819bfdd1190
+      size: 8157
+      isexec: true
+  train_xgboost:
+    cmd: python src/models/train_xgboost.py
+    deps:
+    - path: config/params.yaml
+      hash: md5
+      md5: 8a83ace04b6508949d5a1dab8126caf6
+      size: 1185
+      isexec: true
+    - path: data/processed/test.csv
+      hash: md5
+      md5: e2e4a886b947647f0bc0e53783437382
+      size: 20469
+      isexec: true
+    - path: data/processed/train.csv
+      hash: md5
+      md5: b0affc53ed388acdce2e337ac6d84beb
+      size: 81353
+      isexec: true
+    - path: src/models/train_xgboost.py
+      hash: md5
+      md5: 816d1c2ff7f39a559ac895a99509ab08
+      size: 2612
+      isexec: true
+    outs:
+    - path: dvclive/xgboost/metrics.json
+      hash: md5
+      md5: 97caf83645782046f12cc118ca6f45fd
+      size: 128
+      isexec: true
+    - path: dvclive/xgboost/plots
+      hash: md5
+      md5: 30ed5b8a3fcf36d5aa94a13765e73bdf.dir
+      size: 90
+      nfiles: 3
+    - path: models/xgboost.json
+      hash: md5
+      md5: ba28ed71f9d4144118871260bf04c7bb
+      size: 313515
+      isexec: true
+    - path: reports/figures/xgboost_feature_importance.png
+      hash: md5
+      md5: 83d1f9e9dd880d5e8ed04dba8a20fe0d
+      size: 9118
+      isexec: true

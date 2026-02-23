@@ -3,8 +3,9 @@ import pandas as pd
 import numpy as np
 
 from typing import Tuple
-from sklearn.linear_model import LinearRegression
+from catboost import CatBoostRegressor
 from sklearn.metrics import root_mean_squared_error, mean_absolute_error, r2_score
+import matplotlib.pyplot as plt
 from dvclive import Live
 
 
@@ -24,15 +25,15 @@ def main() -> None:
     y_train_log = np.log1p(y_train)
 
     # Load model params
-    params = config['models']['linear']
+    params = config['models']['catboost']
     
     # Initialize model
-    model = LinearRegression(**params)
+    model = CatBoostRegressor(**params)
 
-    with Live(dir="dvclive/linear") as live:
+    with Live(dir="dvclive/catboost") as live:
 
         # Log parameters
-        live.log_param("model", "LinearRegression")
+        live.log_param("model", "CatBoostRegressor")
         for param, value in params.items():
             live.log_param(param, value)
 
@@ -48,14 +49,16 @@ def main() -> None:
         for metric, value in metrics.items():
             live.log_metric(f"test/{metric}", value)
 
-        # Log coefficients
-        coef = model.coef_
-        for i, value in enumerate(coef):
-            live.log_metric(f"coef_{i}", float(value), plot=False)
+        # Save importances plot
+        importance = model.get_feature_importance()
+        os.makedirs("reports/figures", exist_ok=True)
+        plt.bar(range(len(importance)), importance)
+        plt.savefig("reports/figures/catboost_feature_importance.png")
+        plt.close()
 
     # Save model
-    os.makedirs(config['models']['models_path'], exist_ok=True)
-    joblib.dump(model, config['models']['models_path'] + "linear.pkl")
+    os.makedirs(config["models"]["models_path"], exist_ok=True)
+    model.save_model(config["models"]["models_path"] + "catboost.cbm")
 
 
 def load_data(

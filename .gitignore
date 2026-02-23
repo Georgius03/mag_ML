@@ -1,12 +1,12 @@
 
 catboost_info/
-
 .vscode/
 .idea/
 .ipynb_checkpoints/
 
 data/processed/*.csv
 dvc_storage/
+dvclive/
 reports/
 
 *.log

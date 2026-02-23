@@ -68,6 +68,7 @@ stages:
     - dvclive/xgboost/metrics.json
     plots:
     - dvclive/xgboost/plots
+
 params:
 - dvclive/linear/params.yaml
 - dvclive/decision_tree/params.yaml

@@ -5,8 +5,8 @@ catboost_info/
 .idea/
 .ipynb_checkpoints/
 
+data/processed/*.csv
 dvc_storage/
-
 reports/*.html
 
 *.log

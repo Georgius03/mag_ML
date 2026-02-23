@@ -5,18 +5,27 @@ stages:
     deps:
     - data/raw/insurance.csv
     - src/data/make_dataset.py
-    - config/params.yaml
+    params:
+    - config/params.yaml:
+      - base
+      - data
     outs:
     - data/processed/train.csv
     - data/processed/test.csv
+    - data/processed/data_x.npy
+    - data/processed/data_y.npy
+    - data/processed/insurance_processed.csv
 
   train_linear:
     cmd: python src/models/train_linear.py
     deps:
-    - config/params.yaml
     - data/processed/train.csv
     - data/processed/test.csv
     - src/models/train_linear.py
+    params:
+    - config/params.yaml:
+      - base
+      - models.linear
     outs:
     - models/linear.pkl
     metrics:
@@ -27,10 +36,13 @@ stages:
   train_decision_tree:
     cmd: python src/models/train_decision_tree.py
     deps:
-    - config/params.yaml
     - data/processed/train.csv
     - data/processed/test.csv
     - src/models/train_decision_tree.py
+    params:
+    - config/params.yaml:
+      - base
+      - models.decision_tree
     outs:
     - models/decision_tree.pkl
     - reports/figures/decision_tree_structure.png
@@ -42,10 +54,13 @@ stages:
   train_catboost:
     cmd: python src/models/train_catboost.py
     deps:
-    - config/params.yaml
     - data/processed/train.csv
     - data/processed/test.csv
     - src/models/train_catboost.py
+    params:
+    - config/params.yaml:
+      - base
+      - models.catboost
     outs:
     - models/catboost.cbm
     - reports/figures/catboost_feature_importance.png
@@ -57,10 +72,13 @@ stages:
   train_xgboost:
     cmd: python src/models/train_xgboost.py
     deps:
-    - config/params.yaml
     - data/processed/train.csv
     - data/processed/test.csv
     - src/models/train_xgboost.py
+    params:
+    - config/params.yaml:
+      - base
+      - models.xgboost
     outs:
     - models/xgboost.json
     - reports/figures/xgboost_feature_importance.png
@@ -69,11 +87,9 @@ stages:
     plots:
     - dvclive/xgboost/plots
 
+# Глобальные параметры, метрики и графики
 params:
-- dvclive/linear/params.yaml
-- dvclive/decision_tree/params.yaml
-- dvclive/catboost/params.yaml
-- dvclive/xgboost/params.yaml
+- config/params.yaml
 metrics:
 - dvclive/linear/metrics.json
 - dvclive/decision_tree/metrics.json

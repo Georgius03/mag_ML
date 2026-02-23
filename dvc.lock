@@ -5,8 +5,8 @@ stages:
     deps:
     - path: config/params.yaml
       hash: md5
-      md5: 56205565f888ad4abb3720aa2424fff2
-      size: 1183
+      md5: 3841a7ead0e0789af22b141ad0bc064a
+      size: 1156
       isexec: true
     - path: data/raw/insurance.csv
       hash: md5
@@ -19,6 +19,21 @@ stages:
       size: 2414
       isexec: true
     outs:
+    - path: data/processed/data_x.npy
+      hash: md5
+      md5: 1ad47103afa72d0ab6ad8e469795d86a
+      size: 109600
+      isexec: true
+    - path: data/processed/data_y.npy
+      hash: md5
+      md5: 4b06fb1246844baaea1f2ad5a2c03102
+      size: 10080
+      isexec: true
+    - path: data/processed/insurance_processed.csv
+      hash: md5
+      md5: ffedfffb8cab9b2501f1d5292274b2e1
+      size: 101694
+      isexec: true
     - path: data/processed/test.csv
       hash: md5
       md5: e2e4a886b947647f0bc0e53783437382
@@ -32,6 +47,11 @@ stages:
   train_linear:
     cmd: python src/models/train_linear.py
     deps:
+    - path: config/params.yaml
+      hash: md5
+      md5: 3841a7ead0e0789af22b141ad0bc064a
+      size: 1156
+      isexec: true
     - path: data/processed/test.csv
       hash: md5
       md5: e2e4a886b947647f0bc0e53783437382
@@ -47,55 +67,6 @@ stages:
       md5: 2d2a4de326d8ca8890efc4ceacc0dbd3
       size: 2617
       isexec: true
-    params:
-      config/params.yaml:
-        base:
-          random_state: 42
-          test_size: 0.2
-          root_project_dir: /mnt/c/Jupyter-projects/mag_ML
-        data:
-          raw_dataset_csv: data/raw/insurance.csv
-          processed_dataset_csv: data/processed/insurance_processed.csv
-          dataset_x_path_np: data/processed/data_x.npy
-          dataset_y_path_np: data/processed/data_y.npy
-          train_path: data/processed/train.csv
-          test_path: data/processed/test.csv
-          target_column: charges
-        models:
-          models_path: models/
-          linear:
-            n_jobs:
-          decision_tree:
-            criterion: squared_error
-            max_depth: 5
-            min_samples_split: 2
-            min_samples_leaf: 1
-            random_state: 42
-          xgboost:
-            n_estimators: 200
-            learning_rate: 0.05
-            max_depth: 4
-            subsample: 0.8
-            colsample_bytree: 0.8
-            random_state: 42
-          catboost:
-            iterations: 300
-            depth: 6
-            learning_rate: 0.05
-            loss_function: RMSE
-            verbose: false
-            random_seed: 42
-          ann:
-            hidden_dim: 64
-            epochs: 100
-            lr: 0.001
-            batch_size: 32
-            weight_decay: 0.0
-            random_state: 42
-        reports:
-          ydata_report_path: reports/ydata_report.html
-          dvclive_path: reports/live/
-          metrics_path: reports/metrics/
     outs:
     - path: dvclive/linear/metrics.json
       hash: md5
@@ -115,6 +86,11 @@ stages:
   train_decision_tree:
     cmd: python src/models/train_decision_tree.py
     deps:
+    - path: config/params.yaml
+      hash: md5
+      md5: 3841a7ead0e0789af22b141ad0bc064a
+      size: 1156
+      isexec: true
     - path: data/processed/test.csv
       hash: md5
       md5: e2e4a886b947647f0bc0e53783437382
@@ -130,79 +106,35 @@ stages:
       md5: bbfe97c3dfea853017c053343ae81d05
       size: 2666
       isexec: true
-    params:
-      config/params.yaml:
-        base:
-          random_state: 42
-          test_size: 0.2
-          root_project_dir: /mnt/c/Jupyter-projects/mag_ML
-        data:
-          raw_dataset_csv: data/raw/insurance.csv
-          processed_dataset_csv: data/processed/insurance_processed.csv
-          dataset_x_path_np: data/processed/data_x.npy
-          dataset_y_path_np: data/processed/data_y.npy
-          train_path: data/processed/train.csv
-          test_path: data/processed/test.csv
-          target_column: charges
-        models:
-          models_path: models/
-          linear:
-            n_jobs:
-          decision_tree:
-            criterion: squared_error
-            max_depth: 5
-            min_samples_split: 2
-            min_samples_leaf: 1
-            random_state: 42
-          xgboost:
-            n_estimators: 200
-            learning_rate: 0.05
-            max_depth: 4
-            subsample: 0.8
-            colsample_bytree: 0.8
-            random_state: 42
-          catboost:
-            iterations: 300
-            depth: 6
-            learning_rate: 0.05
-            loss_function: RMSE
-            verbose: false
-            random_seed: 42
-          ann:
-            hidden_dim: 64
-            epochs: 100
-            lr: 0.001
-            batch_size: 32
-            weight_decay: 0.0
-            random_state: 42
-        reports:
-          ydata_report_path: reports/ydata_report.html
-          dvclive_path: reports/live/
-          metrics_path: reports/metrics/
     outs:
     - path: dvclive/decision_tree/metrics.json
       hash: md5
-      md5: 79e3f03a596527d9ff7b25901db53d3a
-      size: 126
+      md5: 00a13cc78e22d5ca2b7ea0b85b1c1e6f
+      size: 127
       isexec: true
     - path: dvclive/decision_tree/plots
       hash: md5
-      md5: f84d4143e6a158998259f899cb40bae1.dir
-      size: 88
+      md5: 4861b86bf5a4f7014270b7ba570919d2.dir
+      size: 89
       nfiles: 3
     - path: models/decision_tree.pkl
       hash: md5
-      md5: 08660f53ff93e4aac3845177e7576e44
-      size: 6049
+      md5: a7a72f7cb38f3cbcef58d4929d9e6f98
+      size: 33409
       isexec: true
     - path: reports/figures/decision_tree_structure.png
       hash: md5
-      md5: 5e52ef2191e621f675b72ec29ba8ee84
-      size: 53398
+      md5: 9f5da601823c04319f74d5a6b73c9f42
+      size: 53426
       isexec: true
   train_catboost:
     cmd: python src/models/train_catboost.py
     deps:
+    - path: config/params.yaml
+      hash: md5
+      md5: 3841a7ead0e0789af22b141ad0bc064a
+      size: 1156
+      isexec: true
     - path: data/processed/test.csv
       hash: md5
       md5: e2e4a886b947647f0bc0e53783437382
@@ -218,79 +150,35 @@ stages:
       md5: 52ab24d852eb320f3c7135454f7a50cb
       size: 2641
       isexec: true
-    params:
-      config/params.yaml:
-        base:
-          random_state: 42
-          test_size: 0.2
-          root_project_dir: /mnt/c/Jupyter-projects/mag_ML
-        data:
-          raw_dataset_csv: data/raw/insurance.csv
-          processed_dataset_csv: data/processed/insurance_processed.csv
-          dataset_x_path_np: data/processed/data_x.npy
-          dataset_y_path_np: data/processed/data_y.npy
-          train_path: data/processed/train.csv
-          test_path: data/processed/test.csv
-          target_column: charges
-        models:
-          models_path: models/
-          linear:
-            n_jobs:
-          decision_tree:
-            criterion: squared_error
-            max_depth: 5
-            min_samples_split: 2
-            min_samples_leaf: 1
-            random_state: 42
-          xgboost:
-            n_estimators: 200
-            learning_rate: 0.05
-            max_depth: 4
-            subsample: 0.8
-            colsample_bytree: 0.8
-            random_state: 42
-          catboost:
-            iterations: 300
-            depth: 6
-            learning_rate: 0.05
-            loss_function: RMSE
-            verbose: false
-            random_seed: 42
-          ann:
-            hidden_dim: 64
-            epochs: 100
-            lr: 0.001
-            batch_size: 32
-            weight_decay: 0.0
-            random_state: 42
-        reports:
-          ydata_report_path: reports/ydata_report.html
-          dvclive_path: reports/live/
-          metrics_path: reports/metrics/
     outs:
     - path: dvclive/catboost/metrics.json
       hash: md5
-      md5: 74d0b3ea4161878d4bb457b4ba90ce30
-      size: 126
+      md5: 2d9c26e8677ab32b5b84c2b3cb0d7bc6
+      size: 124
       isexec: true
     - path: dvclive/catboost/plots
       hash: md5
-      md5: a93fe4d9733c3cfaa72d55d5940d16f5.dir
-      size: 88
+      md5: 59c5b29839ade459e808ac62ccea05b3.dir
+      size: 86
       nfiles: 3
     - path: models/catboost.cbm
       hash: md5
-      md5: 1274ede80e3f32069da70cb28396ad6c
-      size: 325840
+      md5: 8d3477a895842339449dfa4d4332fb31
+      size: 180936
       isexec: true
     - path: reports/figures/catboost_feature_importance.png
       hash: md5
-      md5: 2e774e724a81747f5f671819bfdd1190
-      size: 8157
+      md5: 84f1c00d9c3f0fafd7a07004bd26d722
+      size: 8155
       isexec: true
   train_xgboost:
     cmd: python src/models/train_xgboost.py
     deps:
+    - path: config/params.yaml
+      hash: md5
+      md5: 3841a7ead0e0789af22b141ad0bc064a
+      size: 1156
+      isexec: true
     - path: data/processed/test.csv
       hash: md5
       md5: e2e4a886b947647f0bc0e53783437382
@@ -306,73 +194,24 @@ stages:
       md5: 66c6ca0eccd525fb2ef8f5e5669c35c1
       size: 2618
       isexec: true
-    params:
-      config/params.yaml:
-        base:
-          random_state: 42
-          test_size: 0.2
-          root_project_dir: /mnt/c/Jupyter-projects/mag_ML
-        data:
-          raw_dataset_csv: data/raw/insurance.csv
-          processed_dataset_csv: data/processed/insurance_processed.csv
-          dataset_x_path_np: data/processed/data_x.npy
-          dataset_y_path_np: data/processed/data_y.npy
-          train_path: data/processed/train.csv
-          test_path: data/processed/test.csv
-          target_column: charges
-        models:
-          models_path: models/
-          linear:
-            n_jobs:
-          decision_tree:
-            criterion: squared_error
-            max_depth: 5
-            min_samples_split: 2
-            min_samples_leaf: 1
-            random_state: 42
-          xgboost:
-            n_estimators: 200
-            learning_rate: 0.05
-            max_depth: 4
-            subsample: 0.8
-            colsample_bytree: 0.8
-            random_state: 42
-          catboost:
-            iterations: 300
-            depth: 6
-            learning_rate: 0.05
-            loss_function: RMSE
-            verbose: false
-            random_seed: 42
-          ann:
-            hidden_dim: 64
-            epochs: 100
-            lr: 0.001
-            batch_size: 32
-            weight_decay: 0.0
-            random_state: 42
-        reports:
-          ydata_report_path: reports/ydata_report.html
-          dvclive_path: reports/live/
-          metrics_path: reports/metrics/
     outs:
     - path: dvclive/xgboost/metrics.json
       hash: md5
-      md5: 97caf83645782046f12cc118ca6f45fd
-      size: 128
+      md5: 4a24dcbad4fd65b418a34a4cc18ef76c
+      size: 127
       isexec: true
     - path: dvclive/xgboost/plots
       hash: md5
-      md5: 30ed5b8a3fcf36d5aa94a13765e73bdf.dir
-      size: 90
+      md5: 33ef9b1efdec2ca4a7558ba4d5476643.dir
+      size: 89
       nfiles: 3
     - path: models/xgboost.json
       hash: md5
-      md5: ba28ed71f9d4144118871260bf04c7bb
-      size: 313515
+      md5: c8af1ed78e5665616465f8ac6c266b4b
+      size: 2489487
       isexec: true
     - path: reports/figures/xgboost_feature_importance.png
       hash: md5
-      md5: 83d1f9e9dd880d5e8ed04dba8a20fe0d
-      size: 9118
+      md5: f533d3ff836228132f5ccf8210643b2a
+      size: 9131
       isexec: true

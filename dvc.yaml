@@ -1,0 +1,18 @@
+stages: 
+  preprocess:
+    cmd: python src/data/make_dataset.py
+    deps:
+      - data/raw
+      - src/data/make_dataset.py
+    outs:
+      - data/processed
+
+  train_linear:
+    cmd: python src/models/train_linear.py
+    deps:
+      - data/processed/features.csv
+      - src/models/train_linear.py
+    outs:
+      - models/linear.pkl
+    metrics:
+      - reports/metrics/linear.json

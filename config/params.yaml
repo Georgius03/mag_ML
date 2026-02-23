@@ -4,10 +4,14 @@ base:
 
 data:
   raw_dataset_csv: 'data/raw/insurance.csv'
-  features_path: 'data/processed/featured_insurance.csv'
+  
+  processed_dataset_csv: 'data/processed/insurance_processed.csv'
+  dataset_x_path_np: 'data/processed/data_x.npy'
+  dataset_y_path_np: 'data/processed/data_y.npy'
+
   test_size: 0.2
-  dataset_x_path: 'data/processed/data_x.npy'
-  dataset_y_path: 'data/processed/data_y.npy'
+  train_path: 'data/processed/train.csv'
+  test_path: 'data/processed/test.csv'
 
 reports:
   report_path: 'reports/metrics.json'

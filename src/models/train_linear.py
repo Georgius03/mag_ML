@@ -1,10 +1,11 @@
-import joblib, os, yaml
+import joblib, os, yaml, json
 import pandas as pd
 import numpy as np
 
 from typing import Tuple
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import root_mean_squared_error, mean_absolute_error, r2_score
+import matplotlib.pyplot as plt
 from dvclive import Live
 
 
@@ -49,9 +50,13 @@ def main() -> None:
             live.log_metric(f"test/{metric}", value)
 
         # Log coefficients
-        coef = model.coef_
-        for i, value in enumerate(coef):
-            live.log_metric(f"coef_{i}", float(value), plot=False)
+        coef_dict = {
+            f"coef_{i}": float(v)
+            for i, v in enumerate(model.coef_)
+        }
+
+        with open("reports/linear_coefficients.json", "w") as f:
+            json.dump(coef_dict, f, indent=4)
 
     # Save model
     os.makedirs(config['models']['models_path'], exist_ok=True)

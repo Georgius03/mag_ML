@@ -49,14 +49,14 @@ stages:
       isexec: true
     - path: src/models/train_linear.py
       hash: md5
-      md5: 9c945060dd4932323badd83376936d12
-      size: 2489
+      md5: 2d2a4de326d8ca8890efc4ceacc0dbd3
+      size: 2617
       isexec: true
     outs:
     - path: dvclive/linear/metrics.json
       hash: md5
-      md5: 37fcb492fbdd6ec980266662690a95c2
-      size: 518
+      md5: 7fe0e407503106f64000e2b58a82a3ce
+      size: 126
       isexec: true
     - path: dvclive/linear/plots
       hash: md5
@@ -88,8 +88,8 @@ stages:
       isexec: true
     - path: src/models/train_decision_tree.py
       hash: md5
-      md5: b5a259c7dbbd42a6530836b846287c78
-      size: 2660
+      md5: bbfe97c3dfea853017c053343ae81d05
+      size: 2666
       isexec: true
     outs:
     - path: dvclive/decision_tree/metrics.json
@@ -132,8 +132,8 @@ stages:
       isexec: true
     - path: src/models/train_catboost.py
       hash: md5
-      md5: 41dc1a24eab733c0a33c9749bf9c1eeb
-      size: 2635
+      md5: 52ab24d852eb320f3c7135454f7a50cb
+      size: 2641
       isexec: true
     outs:
     - path: dvclive/catboost/metrics.json
@@ -148,7 +148,7 @@ stages:
       nfiles: 3
     - path: models/catboost.cbm
       hash: md5
-      md5: 19c678738ea81e027bc3c74cc90400da
+      md5: 5f1b5a4a54f3569baabeaf54051658ad
       size: 325840
       isexec: true
     - path: reports/figures/catboost_feature_importance.png
@@ -176,8 +176,8 @@ stages:
       isexec: true
     - path: src/models/train_xgboost.py
       hash: md5
-      md5: 816d1c2ff7f39a559ac895a99509ab08
-      size: 2612
+      md5: 66c6ca0eccd525fb2ef8f5e5669c35c1
+      size: 2618
       isexec: true
     outs:
     - path: dvclive/xgboost/metrics.json

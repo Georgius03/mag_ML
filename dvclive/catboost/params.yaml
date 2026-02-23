@@ -1,7 +1,0 @@
-model: CatBoostRegressor
-iterations: 300
-depth: 6
-learning_rate: 0.05
-loss_function: RMSE
-verbose: false
-random_seed: 42

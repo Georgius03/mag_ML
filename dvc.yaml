@@ -28,6 +28,8 @@ stages:
       - models.linear
     outs:
     - models/linear.pkl
+    - reports/figures/linear_coefficients.png
+    - reports/linear_coefficients.json
     metrics:
     - dvclive/linear/metrics.json
     plots:
@@ -87,20 +89,45 @@ stages:
     plots:
     - dvclive/xgboost/plots
 
+  train_ann:
+    cmd: python src/models/train_ann.py
+    deps:
+    - data/processed/train.csv
+    - data/processed/test.csv
+    - src/models/train_ann.py
+    params:
+    - config/params.yaml:
+      - base
+      - models.ann
+    outs:
+    - models/ann.keras
+    - reports/figures/ann_loss_curve.png
+    - reports/figures/ann_model_graph.png
+    - reports/figures/ann_weights_layer_1.png
+    - reports/figures/ann_weights_layer_2.png
+    - reports/figures/ann_weights_layer_3.png
+    metrics:
+    - dvclive/ann/metrics.json
+    plots:
+    - dvclive/ann/plots
+
 # Глобальные параметры, метрики и графики
 params:
 - config/params.yaml
+- dvclive/linear/params.yaml
+- dvclive/ANN/params.yaml
+- dvclive/ann/params.yaml
 metrics:
-- dvclive/linear/metrics.json
 - dvclive/decision_tree/metrics.json
 - dvclive/catboost/metrics.json
 - dvclive/xgboost/metrics.json
+- dvclive/linear/metrics.json
 plots:
-- dvclive/linear/plots/metrics:
-    x: step
 - dvclive/decision_tree/plots/metrics:
     x: step
 - dvclive/catboost/plots/metrics:
     x: step
 - dvclive/xgboost/plots/metrics:
+    x: step
+- dvclive/linear/plots/metrics:
     x: step

@@ -64,5 +64,5 @@ models:
       activation: 'tanh'
       learning_rate: 0.001
     train_params:
-      epochs: 10
-      verbose: 1
+      epochs: 100
+      verbose: 0

@@ -4,7 +4,9 @@ catboost_info/
 .idea/
 .ipynb_checkpoints/
 
+data/raw
 data/processed
+
 dvc_storage/
 dvclive/
 reports/

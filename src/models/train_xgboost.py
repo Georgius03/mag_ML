@@ -30,7 +30,7 @@ def main() -> None:
     # Initialize model
     model = XGBRegressor(**params)
 
-    with Live(dir="dvclive/xgboost") as live:
+    with Live(dir="dvclive/xgboost", save_dvc_exp=True) as live:
 
         # Log parameters
         live.log_param("model", "XGBRegressor")
@@ -53,7 +53,7 @@ def main() -> None:
         importance = model.feature_importances_
         os.makedirs("reports/figures", exist_ok=True)
         plt.bar(range(len(importance)), importance)
-        plt.savefig("reports/figures/xgboost_feature_importance.png")
+        plt.savefig(config["reports"]["figures_path"] + "xgboost_feature_importance.png")
         plt.close()
 
     # Save model

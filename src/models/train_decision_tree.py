@@ -30,7 +30,7 @@ def main() -> None:
     # Initialize model
     model = DecisionTreeRegressor(**params)
 
-    with Live(dir="dvclive/decision_tree") as live:
+    with Live(dir="dvclive/decision_tree", save_dvc_exp=True) as live:
 
         # Log parameters
         live.log_param("model", "DecisionTreeRegressor")
@@ -50,11 +50,11 @@ def main() -> None:
             live.log_metric(f"test/{metric}", value)
 
         # Save tree plot
-        os.makedirs("reports/figures", exist_ok=True)
+        os.makedirs(config["reports"]["figures_path"], exist_ok=True)
         plt.figure(figsize=(12, 6))
         
         plot_tree(model, max_depth=2, filled=True)
-        plt.savefig("reports/figures/decision_tree_structure.png")
+        plt.savefig(config["reports"]["figures_path"] + "decision_tree_structure.png")
         plt.close()
 
     # Save model

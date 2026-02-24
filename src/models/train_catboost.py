@@ -30,7 +30,7 @@ def main() -> None:
     # Initialize model
     model = CatBoostRegressor(**params)
 
-    with Live(dir="dvclive/catboost") as live:
+    with Live(dir="dvclive/catboost", save_dvc_exp=True) as live:
 
         # Log parameters
         live.log_param("model", "CatBoostRegressor")
@@ -53,7 +53,7 @@ def main() -> None:
         importance = model.get_feature_importance()
         os.makedirs("reports/figures", exist_ok=True)
         plt.bar(range(len(importance)), importance)
-        plt.savefig("reports/figures/catboost_feature_importance.png")
+        plt.savefig(config["reports"]["figures_path"] + "catboost_feature_importance.png")
         plt.close()
 
     # Save model

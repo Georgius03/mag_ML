@@ -30,7 +30,7 @@ def main() -> None:
     # Initialize model
     model = LinearRegression(**params)
 
-    with Live(dir="dvclive/linear") as live:
+    with Live(dir="dvclive/linear", save_dvc_exp=True) as live:
 
         # Log parameters
         live.log_param("model", "LinearRegression")
@@ -50,13 +50,24 @@ def main() -> None:
             live.log_metric(f"test/{metric}", value)
 
         # Log coefficients
-        coef_dict = {
-            f"coef_{i}": float(v)
-            for i, v in enumerate(model.coef_)
-        }
+        coef_dict = {f"coef_{i}": float(v) for i, v in enumerate(model.coef_)}
 
         with open("reports/linear_coefficients.json", "w") as f:
             json.dump(coef_dict, f, indent=4)
+        
+        features = list(coef_dict.keys())
+        coefficients = list(coef_dict.values())
+
+        plt.figure(figsize=(8, 5))
+        plt.bar(features, coefficients, color='skyblue')
+        plt.axhline(0, color='black', linewidth=0.8)
+        plt.title("Коэффициенты линейной модели")
+        plt.ylabel("Значение коэффициента")
+        plt.xlabel("Признаки")
+        plt.xticks(rotation=45, ha='right')
+        plt.tight_layout()
+        plt.savefig(config["reports"]["figures_path"] + "linear_coefficients.png")
+        plt.close()
 
     # Save model
     os.makedirs(config['models']['models_path'], exist_ok=True)

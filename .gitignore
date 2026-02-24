@@ -9,6 +9,8 @@ data/processed/*.npy
 dvc_storage/
 dvclive/
 reports/
+logs/
+models/
 
 *.log
 

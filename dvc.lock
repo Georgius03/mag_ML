@@ -260,3 +260,81 @@ stages:
       md5: f533d3ff836228132f5ccf8210643b2a
       size: 9131
       isexec: true
+  train_ann:
+    cmd: python src/models/train_ann.py
+    deps:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: e2e4a886b947647f0bc0e53783437382
+      size: 20469
+      isexec: true
+    - path: data/processed/train.csv
+      hash: md5
+      md5: b0affc53ed388acdce2e337ac6d84beb
+      size: 81353
+      isexec: true
+    - path: src/models/train_ann.py
+      hash: md5
+      md5: 507f51227fae552bfef16939264aab83
+      size: 8871
+      isexec: true
+    params:
+      config/params.yaml:
+        base:
+          random_state: 42
+          test_size: 0.2
+          root_project_dir: /mnt/c/Jupyter-projects/mag_ML
+        models.ann:
+          dataset_params:
+            validation_split: 0.2
+            batch_size: 16
+            random_state: 42
+          model_params:
+            n_hidden_layers: 2
+            n_neurons: 8
+            activation: tanh
+            learning_rate: 0.001
+          train_params:
+            epochs: 100
+            verbose: 0
+    outs:
+    - path: dvclive/ann/metrics.json
+      hash: md5
+      md5: 8a80554c91d9fca8acb82f023de02f11
+      size: 3
+      isexec: true
+    - path: dvclive/ann/plots
+      hash: md5
+      md5: d751713988987e9331980363e24189ce.dir
+      size: 0
+      nfiles: 0
+    - path: models/ann.keras
+      hash: md5
+      md5: ccd2d6c8a6945380111b148e93189aaf
+      size: 30396
+      isexec: true
+    - path: reports/figures/ann_loss_curve.png
+      hash: md5
+      md5: b4c26494a6b86e45373db9a694c29df1
+      size: 29237
+      isexec: true
+    - path: reports/figures/ann_model_graph.png
+      hash: md5
+      md5: 9d033f32fd7973eb1a9ab3130fee292d
+      size: 140709
+      isexec: true
+    - path: reports/figures/ann_weights_layer_1.png
+      hash: md5
+      md5: e77fd2c4c2a59c79b0eeb86819f40106
+      size: 16759
+      isexec: true
+    - path: reports/figures/ann_weights_layer_2.png
+      hash: md5
+      md5: f56fb0a940aee20d74f838c1c59c0866
+      size: 20060
+      isexec: true
+    - path: reports/figures/ann_weights_layer_3.png
+      hash: md5
+      md5: b6ad40fa6dde07d49698ee2041d0ad06
+      size: 21562
+      isexec: true

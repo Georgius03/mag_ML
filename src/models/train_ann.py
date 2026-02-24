@@ -61,15 +61,15 @@ def main() -> None:
     with Live(dir="dvclive/ann", save_dvc_exp=True) as live:
 
         # Log parameters
-        live.log_param("model", "ann")
-        for param, value in dataset_params.items():
-            live.log_param(param, value)
+        # live.log_param("model", "ann")
+        # for param, value in dataset_params.items():
+        #     live.log_param(param, value)
             
-        for param, value in model_params.items():
-            live.log_param(param, value)
+        # for param, value in model_params.items():
+        #     live.log_param(param, value)
             
-        for param, value in train_params.items():
-            live.log_param(param, value)
+        # for param, value in train_params.items():
+        #     live.log_param(param, value)
         
 
         history = model.fit(
@@ -84,7 +84,8 @@ def main() -> None:
 
         metrics: Dict[str, float] = compute_metrics(y_test.values, y_pred)
 
-        print("Test metrics:", metrics)
+        for metric, value in metrics.items():
+            live.log_metric(f"test/{metric}", value)
 
         # Learning Curves
         os.makedirs(config["reports"]["figures_path"], exist_ok=True)

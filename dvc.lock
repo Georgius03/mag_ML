@@ -290,8 +290,8 @@ stages:
             batch_size: 16
             random_state: 42
           model_params:
-            n_hidden_layers: 3
-            n_neurons: 8
+            n_hidden_layers: 4
+            n_neurons: 32
             activation: tanh
             learning_rate: 0.001
           train_params:
@@ -300,41 +300,41 @@ stages:
     outs:
     - path: dvclive/ann/metrics.json
       hash: md5
-      md5: 19815c9f8b3ea2304e192bef3537f60a
-      size: 126
+      md5: a1c4e4a5afc88521e8f29fa4fed097e3
+      size: 127
       isexec: true
     - path: dvclive/ann/plots
       hash: md5
-      md5: 657b16942be7a9ef1770ddebfacb7439.dir
-      size: 88
+      md5: 896e100226e3cc79a04d52254ef0c000.dir
+      size: 89
       nfiles: 3
     - path: models/ann.keras
       hash: md5
-      md5: 8aec417180859a0db59421e2e0e0878f
-      size: 36318
+      md5: 7cacf22724b5ed6ae95292646d8bd286
+      size: 81772
       isexec: true
     - path: reports/figures/ann_loss_curve.png
       hash: md5
-      md5: 1916b3af74bc6ac5e75c88f683a91aa7
-      size: 26782
+      md5: d9d67ca15b136de56854a69e96523e13
+      size: 21675
       isexec: true
     - path: reports/figures/ann_model_graph.png
       hash: md5
-      md5: c877f8d8b2a12377bd9e6e0b349d4d3c
-      size: 175051
+      md5: 08582b462246681326b075a29bb978ba
+      size: 250619
       isexec: true
     - path: reports/figures/ann_weights_layer_1.png
       hash: md5
-      md5: 8e86d7134b57e64b6cb6787145d3a0a6
-      size: 17939
+      md5: 9cf745702040a91f6f989077f04bcb35
+      size: 17737
       isexec: true
     - path: reports/figures/ann_weights_layer_2.png
       hash: md5
-      md5: 68fd8f94e2b28c6d5cb1ec7f07cb4b85
-      size: 18937
+      md5: cbb88a3639da277cef78bf81cc1f583f
+      size: 18533
       isexec: true
     - path: reports/figures/ann_weights_layer_3.png
       hash: md5
-      md5: 9cdbacf3715c378852c59407e8ccb62a
-      size: 20061
+      md5: abf0a1cd5c4a55cda43c7c167cd6a573
+      size: 18799
       isexec: true

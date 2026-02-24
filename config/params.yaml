@@ -19,8 +19,9 @@ data:
 # REPORTS
 reports:
   ydata_report_path: reports/ydata_report.html
-  dvclive_path: reports/live/
+  dvclive_path: dvclive/
   metrics_path: reports/metrics/
+  figures_path: reports/figures/
 
 # MODELS  
 models:
@@ -41,21 +42,27 @@ models:
     learning_rate: 0.05
     max_depth: 10
     subsample: 0.8
-    colsample_bytree: 0.8
+    colsample_bytree: 0.75
     random_state: 42
 
   catboost:
     iterations: 300
-    depth: 5
+    depth: 4
     learning_rate: 0.05
     loss_function: RMSE
     verbose: false
     random_seed: 42
 
-  # ann:
-  #   hidden_dim: 64
-  #   epochs: 100
-  #   lr: 0.001
-  #   batch_size: 32
-  #   weight_decay: 0.0
-  #   random_state: 42
+  ann:
+    dataset_params:
+      validation_split: 0.2
+      batch_size: 16
+      random_state: 42
+    model_params:
+      n_hidden_layers: 2
+      n_neurons: 8
+      activation: 'tanh'
+      learning_rate: 0.001
+    train_params:
+      epochs: 10
+      verbose: 1

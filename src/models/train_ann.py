@@ -6,6 +6,8 @@ from typing import Tuple, Dict
 import tensorflow as tf
 from sklearn.metrics import root_mean_squared_error, mean_absolute_error, r2_score
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use("Agg")
 from dvclive import Live
 from sklearn.model_selection import train_test_split
 
@@ -28,11 +30,9 @@ def main() -> None:
     # Load dataset params
     dataset_params = config["models"]["ann"]["dataset_params"]
 
-    train_ds, val_ds, test_ds = create_tf_dataset(
-        x_train=x_train,
-        y_train=y_train,
-        x_test=x_test,
-        y_test=y_test,
+    train_ds, val_ds = create_tf_dataset(
+        x_train=x_train.values,
+        y_train=y_train_log,
         **dataset_params
         )
 
@@ -70,24 +70,22 @@ def main() -> None:
             train_ds,
             validation_data=val_ds,
             callbacks=[tensorboard_callback],
-
             epochs=train_params["epochs"],
             verbose=train_params["verbose"]
         )
 
-        y_pred: np.ndarray = np.expm1(model.predict(test_ds).flatten())
+        y_pred: np.ndarray = np.expm1(model.predict(x_test).flatten())
 
-        metrics: Dict[str, float] = compute_metrics(
-            y_test.values,
-            y_pred
-        )
+        metrics: Dict[str, float] = compute_metrics(y_test.values, y_pred)
 
         print("Test metrics:", metrics)
 
         # Learning Curves
-        os.makedirs("reports/figures", exist_ok=True)
+        os.makedirs(config["reports"]["figures_path"], exist_ok=True)
 
-        plt.figure()
+        print('debug_1')
+        plt.figure(figsize=(12, 6))
+        print(history.history["loss"])
         plt.plot(history.history["loss"])
         plt.plot(history.history["val_loss"])
         plt.title("Loss Curve")
@@ -95,13 +93,14 @@ def main() -> None:
         plt.ylabel("MSE")
         plt.legend(["Train", "Validation"])
         plt.savefig("reports/figures/ann_loss_curve.png")
-        plt.close()
+        print('debug_2')
 
         # Weight Histograms
         for i, layer in enumerate(model.layers):
+            print(f'debug_{3 + i}')
             if hasattr(layer, "kernel"):
                 weights = layer.kernel.numpy().flatten()
-                plt.figure()
+                plt.figure(figsize=(12, 6))
                 plt.hist(weights, bins=50)
                 plt.title(f"Layer {i} Weight Distribution")
                 plt.xlabel("Weight value")
@@ -178,8 +177,6 @@ def load_data(
 def create_tf_dataset(
     x_train: np.ndarray,
     y_train: np.ndarray,
-    x_test: np.ndarray,
-    y_test: np.ndarray,
     validation_split: float,
     batch_size: int,
     random_state: int = 42
@@ -207,13 +204,7 @@ def create_tf_dataset(
               .cache()
               .prefetch(tf.data.AUTOTUNE))
 
-    test_ds: tf.data.Dataset = tf.data.Dataset.from_tensor_slices((x_test, y_test))
-    test_ds = (test_ds
-               .batch(batch_size)
-               .cache()
-               .prefetch(tf.data.AUTOTUNE))
-
-    return train_ds, val_ds, test_ds
+    return train_ds, val_ds
 
 def compute_metrics(
     y_true: np.ndarray,

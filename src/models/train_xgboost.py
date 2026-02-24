@@ -33,9 +33,9 @@ def main() -> None:
     with Live(dir="dvclive/xgboost", save_dvc_exp=True) as live:
 
         # Log parameters
-        # live.log_param("model", "XGBRegressor")
-        # for param, value in params.items():
-        #     live.log_param(param, value)
+        live.log_param("model", "XGBRegressor")
+        for param, value in params.items():
+            live.log_param(param, value)
 
         # Train
         model.fit(x_train, y_train_log)

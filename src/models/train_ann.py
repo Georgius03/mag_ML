@@ -43,19 +43,25 @@ def main() -> None:
     model: tf.keras.Model = create_ann_model(input_dim=x_train.shape[1], **model_params)
 
     os.makedirs("logs/fit/", exist_ok=True)
-    log_dir: str = "logs/fit/" + datetime.datetime.now().strftime("%H%M%S-%d%m%Y")
+    log_dir: str = "logs/fit/" + datetime.datetime.now().strftime("%H-%M-%S_%d-%m-%Y")
     tensorboard_callback = tf.keras.callbacks.TensorBoard(
         log_dir=log_dir,
-        histogram_freq=1
+        histogram_freq=1,
+        write_graph=True,
+        write_images=True,
+        update_freq="epoch",
+        profile_batch=0
     )
+
+    tf.summary.trace_on(graph=True, profiler=False)
 
     # Load train params
     train_params = config["models"]["ann"]["train_params"]
 
-    with Live(dir="dvclive/ANN", save_dvc_exp=True) as live:
+    with Live(dir="dvclive/ann", save_dvc_exp=True) as live:
 
         # Log parameters
-        live.log_param("model", "ANN")
+        live.log_param("model", "ann")
         for param, value in dataset_params.items():
             live.log_param(param, value)
             
@@ -83,9 +89,7 @@ def main() -> None:
         # Learning Curves
         os.makedirs(config["reports"]["figures_path"], exist_ok=True)
 
-        print('debug_1')
         plt.figure(figsize=(12, 6))
-        print(history.history["loss"])
         plt.plot(history.history["loss"])
         plt.plot(history.history["val_loss"])
         plt.title("Loss Curve")
@@ -93,24 +97,64 @@ def main() -> None:
         plt.ylabel("MSE")
         plt.legend(["Train", "Validation"])
         plt.savefig("reports/figures/ann_loss_curve.png")
-        print('debug_2')
 
         # Weight Histograms
         for i, layer in enumerate(model.layers):
-            print(f'debug_{3 + i}')
             if hasattr(layer, "kernel"):
                 weights = layer.kernel.numpy().flatten()
                 plt.figure(figsize=(12, 6))
-                plt.hist(weights, bins=50)
+                plt.hist(weights, bins=100)
                 plt.title(f"Layer {i} Weight Distribution")
                 plt.xlabel("Weight value")
                 plt.ylabel("Frequency")
                 plt.savefig(config["reports"]["figures_path"] + f"ann_weights_layer_{i}.png")
                 plt.close()
+        
+        tf.keras.utils.plot_model(
+            model,
+            to_file=config["reports"]["figures_path"] + "ann_model_graph.png",
+            show_shapes=True,
+            show_layer_names=True,
+            dpi=300
+        )
+
+        with tf.summary.create_file_writer(log_dir).as_default():
+            tf.summary.trace_export(
+                name="ANN_graph_trace",
+                step=0,
+                profiler_outdir=log_dir
+            )
+        
+        writer = tf.summary.create_file_writer(log_dir)
+
+        with writer.as_default():
+
+            # ---- 1. Скаляры теста (в исходной шкале) ----
+            tf.summary.scalar("test/RMSE_original", metrics["rmse"], step=0)
+            tf.summary.scalar("test/MAE_original", metrics["mae"], step=0)
+            tf.summary.scalar("test/R2_original", metrics["r2"], step=0)
+
+            # ---- 2. Распределение ошибок ----
+            errors = y_test.values - y_pred
+            tf.summary.histogram("test/error_distribution", errors, step=0)
+
+            # ---- 3. Распределение предсказаний ----
+            tf.summary.histogram("test/y_pred_distribution", y_pred, step=0)
+            tf.summary.histogram("test/y_true_distribution", y_test.values, step=0)
+
+            # ---- 4. Нормы весов по слоям ----
+            for layer in model.layers:
+                if hasattr(layer, "kernel"):
+                    weights = layer.kernel
+                    weight_norm = tf.norm(weights)
+                    tf.summary.scalar(f"weights_norm/{layer.name}", weight_norm, step=0)
+                    tf.summary.histogram(f"weights_hist/{layer.name}", weights, step=0)
+
+            writer.flush()
 
     # Save Model
     os.makedirs(config["models"]["models_path"], exist_ok=True)
-    model.save(config["models"]["models_path"] + "ann_model.keras")
+    model.save(config["models"]["models_path"] + "ann.keras")
 
 
 # Model Creation
@@ -153,7 +197,6 @@ def create_ann_model(
     )
 
     return model
-
 
 def load_data(
     train_path: str,

@@ -282,9 +282,9 @@ dvclive/ann/metrics.json            2792.78227  0.77664    5474.55504
 
 > [!IMPORTANT]
 > - Создан DVC-пайплайн для воспроизводимого ML:
-> - Стадии: preprocess + обучение 5 моделей (train_linear, train_tree, train_catboost, train_xgboost, train_ann)
-> - Параметры: централизованное хранение в params.yaml
-> - Эксперименты: запуск с перебором гиперпараметров через dvc exp run -S
+>   - Стадии: preprocess + обучение 5 моделей (train_linear, train_tree, train_catboost, train_xgboost, train_ann)
+>   - Параметры: централизованное хранение в params.yaml
+>   - Эксперименты: запуск с перебором гиперпараметров через dvc exp run -S
 >
 > - Лучшая модель: CatBoost (минимальные ошибки MAE/RMSE)
 > - Ключевой признак: smoker (доминирует во всех моделях)

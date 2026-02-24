@@ -119,6 +119,11 @@ stages:
 # Глобальные параметры, метрики и графики
 params:
 - config/params.yaml
+- dvclive/linear/params.yaml
+- dvclive/decision_tree/params.yaml
+- dvclive/catboost/params.yaml
+- dvclive/xgboost/params.yaml
+- dvclive/ann/params.yaml
 metrics:
 - dvclive/linear/metrics.json
 - dvclive/decision_tree/metrics.json

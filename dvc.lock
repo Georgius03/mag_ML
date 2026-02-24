@@ -68,8 +68,8 @@ stages:
       isexec: true
     - path: src/models/train_linear.py
       hash: md5
-      md5: 462de142b6abfcd6df18ddc78f289760
-      size: 3206
+      md5: da4e6968e85fc26e4aea5bd85f03e02b
+      size: 3200
       isexec: true
     params:
       config/params.yaml:
@@ -84,6 +84,11 @@ stages:
       hash: md5
       md5: 7fe0e407503106f64000e2b58a82a3ce
       size: 126
+      isexec: true
+    - path: dvclive/linear/params.yaml
+      hash: md5
+      md5: ad70358fce18054a449144e0d0b49a07
+      size: 32
       isexec: true
     - path: dvclive/linear/plots
       hash: md5
@@ -120,8 +125,8 @@ stages:
       isexec: true
     - path: src/models/train_decision_tree.py
       hash: md5
-      md5: 5398c9813c471aff024c55366b25e793
-      size: 2727
+      md5: 5d966426641153f5932159339ad10640
+      size: 2721
       isexec: true
     params:
       config/params.yaml:
@@ -140,6 +145,11 @@ stages:
       hash: md5
       md5: 00a13cc78e22d5ca2b7ea0b85b1c1e6f
       size: 127
+      isexec: true
+    - path: dvclive/decision_tree/params.yaml
+      hash: md5
+      md5: 85d9c900fccbb904b540344568ed9537
+      size: 126
       isexec: true
     - path: dvclive/decision_tree/plots
       hash: md5
@@ -171,8 +181,8 @@ stages:
       isexec: true
     - path: src/models/train_catboost.py
       hash: md5
-      md5: b27026a2cc8fbb73afd8e28e4716c5ea
-      size: 2686
+      md5: abdce5884f9cfbb132a661344d0d04fa
+      size: 2680
       isexec: true
     params:
       config/params.yaml:
@@ -193,6 +203,11 @@ stages:
       md5: 38cae8430e87e10ed26d087066bbc06c
       size: 125
       isexec: true
+    - path: dvclive/catboost/params.yaml
+      hash: md5
+      md5: 93e6fe3ce5e8ed1371fccc17c8077ec8
+      size: 121
+      isexec: true
     - path: dvclive/catboost/plots
       hash: md5
       md5: 818981007eb466ce0efc3c768b9ebbac.dir
@@ -200,7 +215,7 @@ stages:
       nfiles: 3
     - path: models/catboost.cbm
       hash: md5
-      md5: 182b558f39a634f6ed1c814629e48bfd
+      md5: 1226489eb82817f4391fa473326b7247
       size: 104392
       isexec: true
     - path: reports/figures/catboost_feature_importance.png
@@ -223,8 +238,8 @@ stages:
       isexec: true
     - path: src/models/train_xgboost.py
       hash: md5
-      md5: 149de9700db84e168b4b6bd01673f54a
-      size: 2663
+      md5: 65930d91a26bbac4ce0fda4d21f23b2c
+      size: 2657
       isexec: true
     params:
       config/params.yaml:
@@ -243,6 +258,11 @@ stages:
     - path: dvclive/xgboost/metrics.json
       hash: md5
       md5: 4a24dcbad4fd65b418a34a4cc18ef76c
+      size: 127
+      isexec: true
+    - path: dvclive/xgboost/params.yaml
+      hash: md5
+      md5: 094fe130bea5fb99b4c24fdaaee58fce
       size: 127
       isexec: true
     - path: dvclive/xgboost/plots
@@ -275,8 +295,8 @@ stages:
       isexec: true
     - path: src/models/train_ann.py
       hash: md5
-      md5: daf04a494a808749258511b0d20be1d7
-      size: 8944
+      md5: 12b2f73b6082b209861319d372493d4d
+      size: 8930
       isexec: true
     params:
       config/params.yaml:
@@ -300,23 +320,28 @@ stages:
     outs:
     - path: dvclive/ann/metrics.json
       hash: md5
-      md5: 19815c9f8b3ea2304e192bef3537f60a
-      size: 126
+      md5: c37f37ab9c7a16184829954322004110
+      size: 127
+      isexec: true
+    - path: dvclive/ann/params.yaml
+      hash: md5
+      md5: fd607897f151dbef6a34652dcd1ad143
+      size: 158
       isexec: true
     - path: dvclive/ann/plots
       hash: md5
-      md5: 657b16942be7a9ef1770ddebfacb7439.dir
-      size: 88
+      md5: f29f772951f37968ce916a208a005314.dir
+      size: 89
       nfiles: 3
     - path: models/ann.keras
       hash: md5
-      md5: 8aec417180859a0db59421e2e0e0878f
+      md5: c608d11c59bb10c49bcd274ae2f439fb
       size: 36318
       isexec: true
     - path: reports/figures/ann_loss_curve.png
       hash: md5
-      md5: 1916b3af74bc6ac5e75c88f683a91aa7
-      size: 26782
+      md5: 7ddb38d675fdc5c3021f723eb0d3c5e1
+      size: 27114
       isexec: true
     - path: reports/figures/ann_model_graph.png
       hash: md5
@@ -325,16 +350,16 @@ stages:
       isexec: true
     - path: reports/figures/ann_weights_layer_1.png
       hash: md5
-      md5: 8e86d7134b57e64b6cb6787145d3a0a6
-      size: 17939
+      md5: 9dfa33a05c1c2a1ca6e4201646b3fdf8
+      size: 16475
       isexec: true
     - path: reports/figures/ann_weights_layer_2.png
       hash: md5
-      md5: 68fd8f94e2b28c6d5cb1ec7f07cb4b85
-      size: 18937
+      md5: 7df546ec234c4ad3cbc598aa9705e57a
+      size: 18390
       isexec: true
     - path: reports/figures/ann_weights_layer_3.png
       hash: md5
-      md5: 9cdbacf3715c378852c59407e8ccb62a
-      size: 20061
+      md5: d654122b21d18da871474512fa276d80
+      size: 19382
       isexec: true

@@ -68,8 +68,8 @@ stages:
       isexec: true
     - path: src/models/train_linear.py
       hash: md5
-      md5: da4e6968e85fc26e4aea5bd85f03e02b
-      size: 3200
+      md5: 462de142b6abfcd6df18ddc78f289760
+      size: 3206
       isexec: true
     params:
       config/params.yaml:
@@ -120,8 +120,8 @@ stages:
       isexec: true
     - path: src/models/train_decision_tree.py
       hash: md5
-      md5: 5d966426641153f5932159339ad10640
-      size: 2721
+      md5: 5398c9813c471aff024c55366b25e793
+      size: 2727
       isexec: true
     params:
       config/params.yaml:
@@ -171,8 +171,8 @@ stages:
       isexec: true
     - path: src/models/train_catboost.py
       hash: md5
-      md5: abdce5884f9cfbb132a661344d0d04fa
-      size: 2680
+      md5: b27026a2cc8fbb73afd8e28e4716c5ea
+      size: 2686
       isexec: true
     params:
       config/params.yaml:
@@ -200,7 +200,7 @@ stages:
       nfiles: 3
     - path: models/catboost.cbm
       hash: md5
-      md5: 32e4d2af5d599a261b3254250fa23ae5
+      md5: 182b558f39a634f6ed1c814629e48bfd
       size: 104392
       isexec: true
     - path: reports/figures/catboost_feature_importance.png
@@ -223,8 +223,8 @@ stages:
       isexec: true
     - path: src/models/train_xgboost.py
       hash: md5
-      md5: 65930d91a26bbac4ce0fda4d21f23b2c
-      size: 2657
+      md5: 149de9700db84e168b4b6bd01673f54a
+      size: 2663
       isexec: true
     params:
       config/params.yaml:
@@ -275,8 +275,8 @@ stages:
       isexec: true
     - path: src/models/train_ann.py
       hash: md5
-      md5: 507f51227fae552bfef16939264aab83
-      size: 8871
+      md5: daf04a494a808749258511b0d20be1d7
+      size: 8944
       isexec: true
     params:
       config/params.yaml:
@@ -290,7 +290,7 @@ stages:
             batch_size: 16
             random_state: 42
           model_params:
-            n_hidden_layers: 2
+            n_hidden_layers: 3
             n_neurons: 8
             activation: tanh
             learning_rate: 0.001
@@ -300,41 +300,41 @@ stages:
     outs:
     - path: dvclive/ann/metrics.json
       hash: md5
-      md5: 8a80554c91d9fca8acb82f023de02f11
-      size: 3
+      md5: 19815c9f8b3ea2304e192bef3537f60a
+      size: 126
       isexec: true
     - path: dvclive/ann/plots
       hash: md5
-      md5: d751713988987e9331980363e24189ce.dir
-      size: 0
-      nfiles: 0
+      md5: 657b16942be7a9ef1770ddebfacb7439.dir
+      size: 88
+      nfiles: 3
     - path: models/ann.keras
       hash: md5
-      md5: ccd2d6c8a6945380111b148e93189aaf
-      size: 30396
+      md5: 8aec417180859a0db59421e2e0e0878f
+      size: 36318
       isexec: true
     - path: reports/figures/ann_loss_curve.png
       hash: md5
-      md5: b4c26494a6b86e45373db9a694c29df1
-      size: 29237
+      md5: 1916b3af74bc6ac5e75c88f683a91aa7
+      size: 26782
       isexec: true
     - path: reports/figures/ann_model_graph.png
       hash: md5
-      md5: 9d033f32fd7973eb1a9ab3130fee292d
-      size: 140709
+      md5: c877f8d8b2a12377bd9e6e0b349d4d3c
+      size: 175051
       isexec: true
     - path: reports/figures/ann_weights_layer_1.png
       hash: md5
-      md5: e77fd2c4c2a59c79b0eeb86819f40106
-      size: 16759
+      md5: 8e86d7134b57e64b6cb6787145d3a0a6
+      size: 17939
       isexec: true
     - path: reports/figures/ann_weights_layer_2.png
       hash: md5
-      md5: f56fb0a940aee20d74f838c1c59c0866
-      size: 20060
+      md5: 68fd8f94e2b28c6d5cb1ec7f07cb4b85
+      size: 18937
       isexec: true
     - path: reports/figures/ann_weights_layer_3.png
       hash: md5
-      md5: b6ad40fa6dde07d49698ee2041d0ad06
-      size: 21562
+      md5: 9cdbacf3715c378852c59407e8ccb62a
+      size: 20061
       isexec: true

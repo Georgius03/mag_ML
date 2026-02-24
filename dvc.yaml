@@ -28,7 +28,7 @@ stages:
       - models.linear
     outs:
     - models/linear.pkl
-    - dvclive/linear/params.yaml
+    # - dvclive/linear/params.yaml
     - reports/figures/linear_coefficients.png
     - reports/linear_coefficients.json
     metrics:
@@ -48,7 +48,7 @@ stages:
       - models.decision_tree
     outs:
     - models/decision_tree.pkl
-    - dvclive/decision_tree/params.yaml
+    # - dvclive/decision_tree/params.yaml
     - reports/figures/decision_tree_structure.png
     metrics:
     - dvclive/decision_tree/metrics.json
@@ -67,7 +67,7 @@ stages:
       - models.catboost
     outs:
     - models/catboost.cbm
-    - dvclive/catboost/params.yaml
+    # - dvclive/catboost/params.yaml
     - reports/figures/catboost_feature_importance.png
     metrics:
     - dvclive/catboost/metrics.json
@@ -86,7 +86,7 @@ stages:
       - models.xgboost
     outs:
     - models/xgboost.json
-    - dvclive/xgboost/params.yaml
+    # - dvclive/xgboost/params.yaml
     - reports/figures/xgboost_feature_importance.png
     metrics:
     - dvclive/xgboost/metrics.json
@@ -105,7 +105,7 @@ stages:
       - models.ann
     outs:
     - models/ann.keras
-    - dvclive/ann/params.yaml
+    # - dvclive/ann/params.yaml
     - reports/figures/ann_loss_curve.png
     - reports/figures/ann_model_graph.png
     - reports/figures/ann_weights_layer_1.png
@@ -119,20 +119,17 @@ stages:
 # Глобальные параметры, метрики и графики
 params:
 - config/params.yaml
-- dvclive/linear/params.yaml
 - dvclive/decision_tree/params.yaml
 - dvclive/catboost/params.yaml
 - dvclive/xgboost/params.yaml
 - dvclive/ann/params.yaml
 metrics:
-- dvclive/linear/metrics.json
 - dvclive/decision_tree/metrics.json
 - dvclive/catboost/metrics.json
 - dvclive/xgboost/metrics.json
 - dvclive/ann/metrics.json
+- dvclive/linear/metrics.json
 plots:
-- dvclive/linear/plots/metrics:
-    x: step
 - dvclive/decision_tree/plots/metrics:
     x: step
 - dvclive/catboost/plots/metrics:
@@ -140,4 +137,6 @@ plots:
 - dvclive/xgboost/plots/metrics:
     x: step
 - dvclive/ann/plots/metrics:
+    x: step
+- dvclive/linear/plots/metrics:
     x: step

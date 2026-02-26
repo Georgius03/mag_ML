@@ -32,10 +32,3 @@ def load_data(
 
     return x_test, y_test
 
-def load_pickle_model(model_path: str):
-    return joblib.load(model_path)
-
-
-def load_keras(model_path: str):
-    return tf.keras.models.load_model(model_path)
-

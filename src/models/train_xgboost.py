@@ -8,7 +8,7 @@ from sklearn.metrics import root_mean_squared_error, mean_absolute_error, r2_sco
 import matplotlib.pyplot as plt
 from dvclive import Live
 
-from src.models.train_utils import load_data
+from train_utils import load_data
 
 def main() -> None:
 

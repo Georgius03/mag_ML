@@ -6,7 +6,7 @@ from typing import Tuple
 from sklearn.linear_model import LinearRegression
 from dvclive import Live
 
-from src.test.test_utils import load_data, compute_metrics
+from test_utils import load_data, compute_metrics
 
 
 def main() -> None:

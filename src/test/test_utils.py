@@ -2,8 +2,6 @@ import joblib, os, yaml, json
 import pandas as pd
 import numpy as np
 
-import tensorflow as tf
-from catboost import CatBoostRegressor
 from sklearn.metrics import root_mean_squared_error, mean_absolute_error, r2_score
 from typing import Tuple, Dict
 

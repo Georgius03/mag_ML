@@ -10,7 +10,7 @@ matplotlib.use("Agg")
 from dvclive import Live
 from sklearn.model_selection import train_test_split
 
-from src.models.train_utils import load_data
+from train_utils import load_data
 
 def main() -> None:
 

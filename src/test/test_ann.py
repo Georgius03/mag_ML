@@ -6,7 +6,7 @@ from typing import Tuple, Dict
 import tensorflow as tf
 from dvclive import Live
 
-from src.test.test_utils import load_data, compute_metrics
+from test_utils import load_data, compute_metrics
 
 
 def main() -> None:

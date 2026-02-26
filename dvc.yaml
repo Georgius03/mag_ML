@@ -127,11 +127,11 @@ stages:
     - dvclive/decision_tree/plots
 
   test_catboost:
-    cmd: python src/test/catboost.py
+    cmd: python src/test/test_catboost.py
     deps:
     - data/processed/test.csv
     - models/catboost.cbm
-    - src/test/catboost.py
+    - src/test/test_catboost.py
     - src/test/test_utils.py
     params:
     - config/params.yaml:

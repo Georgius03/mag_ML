@@ -16,107 +16,166 @@ stages:
     - data/processed/data_y.npy
     - data/processed/insurance_processed.csv
 
+  # ================================ Train stages ================================
   train_linear:
     cmd: python src/models/train_linear.py
     deps:
     - data/processed/train.csv
-    - data/processed/test.csv
     - src/models/train_linear.py
+    - src/models/train_utils.py
     params:
     - config/params.yaml:
       - base
       - models.linear
     outs:
     - models/linear.pkl
-    # - dvclive/linear/params.yaml
     - reports/figures/linear_coefficients.png
     - reports/linear_coefficients.json
-    metrics:
-    - dvclive/linear/metrics.json
-    plots:
-    - dvclive/linear/plots
-
+  
   train_decision_tree:
     cmd: python src/models/train_decision_tree.py
     deps:
     - data/processed/train.csv
-    - data/processed/test.csv
     - src/models/train_decision_tree.py
+    - src/models/train_utils.py
     params:
     - config/params.yaml:
       - base
       - models.decision_tree
     outs:
     - models/decision_tree.pkl
-    # - dvclive/decision_tree/params.yaml
     - reports/figures/decision_tree_structure.png
-    metrics:
-    - dvclive/decision_tree/metrics.json
-    plots:
-    - dvclive/decision_tree/plots
 
   train_catboost:
     cmd: python src/models/train_catboost.py
     deps:
     - data/processed/train.csv
-    - data/processed/test.csv
     - src/models/train_catboost.py
+    - src/models/train_utils.py
     params:
     - config/params.yaml:
       - base
       - models.catboost
     outs:
     - models/catboost.cbm
-    # - dvclive/catboost/params.yaml
     - reports/figures/catboost_feature_importance.png
-    metrics:
-    - dvclive/catboost/metrics.json
-    plots:
-    - dvclive/catboost/plots
 
   train_xgboost:
     cmd: python src/models/train_xgboost.py
     deps:
     - data/processed/train.csv
-    - data/processed/test.csv
     - src/models/train_xgboost.py
+    - src/models/train_utils.py
     params:
     - config/params.yaml:
       - base
       - models.xgboost
     outs:
     - models/xgboost.json
-    # - dvclive/xgboost/params.yaml
     - reports/figures/xgboost_feature_importance.png
-    metrics:
-    - dvclive/xgboost/metrics.json
-    plots:
-    - dvclive/xgboost/plots
 
   train_ann:
     cmd: python src/models/train_ann.py
     deps:
     - data/processed/train.csv
-    - data/processed/test.csv
     - src/models/train_ann.py
+    - src/models/train_utils.py
     params:
     - config/params.yaml:
       - base
       - models.ann
     outs:
     - models/ann.keras
-    # - dvclive/ann/params.yaml
     - reports/figures/ann_loss_curve.png
     - reports/figures/ann_model_graph.png
     - reports/figures/ann_weights_layer_1.png
     - reports/figures/ann_weights_layer_2.png
     - reports/figures/ann_weights_layer_3.png
+
+    
+  # ================================ Train stages ================================
+  test_linear:
+    cmd: python src/test/test_linear.py
+    deps:
+    - data/processed/test.csv
+    - models/linear.pkl
+    - src/test/test_linear.py
+    - src/test/test_utils.py
+    params:
+    - config/params.yaml:
+      - base
+      - models.linear
+    metrics:
+    - dvclive/linear/metrics.json
+    plots:
+    - dvclive/linear/plots
+
+  test_decision_tree:
+    cmd: python src/test/test_decision_tree.py
+    deps:
+    - data/processed/test.csv
+    - models/decision_tree.pkl
+    - src/test/test_decision_tree.py
+    - src/test/test_utils.py
+    params:
+    - config/params.yaml:
+      - base
+      - models.decision_tree
+    metrics:
+    - dvclive/decision_tree/metrics.json
+    plots:
+    - dvclive/decision_tree/plots
+
+  test_catboost:
+    cmd: python src/test/catboost.py
+    deps:
+    - data/processed/test.csv
+    - models/catboost.cbm
+    - src/test/catboost.py
+    - src/test/test_utils.py
+    params:
+    - config/params.yaml:
+      - base
+      - models.catboost
+    metrics:
+    - dvclive/catboost/metrics.json
+    plots:
+    - dvclive/catboost/plots
+
+  test_xgboost:
+    cmd: python src/test/test_xgboost.py
+    deps:
+    - data/processed/test.csv
+    - models/xgboost.json
+    - src/test/test_xgboost.py
+    - src/test/test_utils.py
+    params:
+    - config/params.yaml:
+      - base
+      - models.xgboost
+    metrics:
+    - dvclive/xgboost/metrics.json
+    plots:
+    - dvclive/xgboost/plots
+    
+  test_ann:
+    cmd: python src/test/test_ann.py
+    deps:
+    - data/processed/test.csv
+    - models/ann.keras
+    - src/test/test_ann.py
+    - src/test/test_utils.py
+    params:
+    - config/params.yaml:
+      - base
+      - models.ann
     metrics:
     - dvclive/ann/metrics.json
     plots:
     - dvclive/ann/plots
 
-# Глобальные параметры, метрики и графики
+
+# ================================ Global params, metrics and diagrams ================================
 params:
 - config/params.yaml
 metrics:

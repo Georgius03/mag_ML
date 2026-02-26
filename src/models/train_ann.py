@@ -4,13 +4,13 @@ import numpy as np
 
 from typing import Tuple, Dict
 import tensorflow as tf
-from sklearn.metrics import root_mean_squared_error, mean_absolute_error, r2_score
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use("Agg")
 from dvclive import Live
 from sklearn.model_selection import train_test_split
 
+from src.models.train_utils import load_data
 
 def main() -> None:
 
@@ -19,9 +19,8 @@ def main() -> None:
         config = yaml.safe_load(config_file)
 
     # Load data
-    x_train, y_train, x_test, y_test = load_data(
+    x_train, y_train = load_data(
         train_path=config["data"]["train_path"],
-        test_path=config["data"]["test_path"],
         target_column=config["data"]["target_column"]
     )
 
@@ -58,100 +57,65 @@ def main() -> None:
     # Load train params
     train_params = config["models"]["ann"]["train_params"]
 
-    with Live(dir="dvclive/ann", save_dvc_exp=True) as live:
+    history = model.fit(
+        train_ds,
+        validation_data=val_ds,
+        callbacks=[tensorboard_callback],
+        epochs=train_params["epochs"],
+        verbose=train_params["verbose"]
+    )
 
-        # Log parameters
-        # live.log_param("model", "ann")
-        # for param, value in dataset_params.items():
-        #     live.log_param(param, value)
-            
-        # for param, value in model_params.items():
-        #     live.log_param(param, value)
-            
-        # for param, value in train_params.items():
-        #     live.log_param(param, value)
-        
+    # Learning Curves
+    os.makedirs(config["reports"]["figures_path"], exist_ok=True)
 
-        history = model.fit(
-            train_ds,
-            validation_data=val_ds,
-            callbacks=[tensorboard_callback],
-            epochs=train_params["epochs"],
-            verbose=train_params["verbose"]
+    plt.figure(figsize=(12, 6))
+    plt.plot(history.history["loss"])
+    plt.plot(history.history["val_loss"])
+    plt.title("Loss Curve")
+    plt.xlabel("Epoch")
+    plt.ylabel("MSE")
+    plt.legend(["Train", "Validation"])
+    plt.savefig("reports/figures/ann_loss_curve.png")
+
+    # Weight Histograms
+    for i, layer in enumerate(model.layers):
+        if hasattr(layer, "kernel"):
+            weights = layer.kernel.numpy().flatten()
+            plt.figure(figsize=(12, 6))
+            plt.hist(weights, bins=100)
+            plt.title(f"Layer {i} Weight Distribution")
+            plt.xlabel("Weight value")
+            plt.ylabel("Frequency")
+            plt.savefig(config["reports"]["figures_path"] + f"ann_weights_layer_{i}.png")
+            plt.close()
+    
+    tf.keras.utils.plot_model(
+        model,
+        to_file=config["reports"]["figures_path"] + "ann_model_graph.png",
+        show_shapes=True,
+        show_layer_names=True,
+        dpi=300
+    )
+
+    with tf.summary.create_file_writer(log_dir).as_default():
+        tf.summary.trace_export(
+            name="ANN_graph_trace",
+            step=0,
+            profiler_outdir=log_dir
         )
+    
+    writer = tf.summary.create_file_writer(log_dir)
 
-        y_pred: np.ndarray = np.expm1(model.predict(x_test).flatten())
-
-        metrics: Dict[str, float] = compute_metrics(y_test.values, y_pred)
-
-        for metric, value in metrics.items():
-            live.log_metric(f"test/{metric}", value)
-
-        # Learning Curves
-        os.makedirs(config["reports"]["figures_path"], exist_ok=True)
-
-        plt.figure(figsize=(12, 6))
-        plt.plot(history.history["loss"])
-        plt.plot(history.history["val_loss"])
-        plt.title("Loss Curve")
-        plt.xlabel("Epoch")
-        plt.ylabel("MSE")
-        plt.legend(["Train", "Validation"])
-        plt.savefig("reports/figures/ann_loss_curve.png")
-
-        # Weight Histograms
-        for i, layer in enumerate(model.layers):
+    with writer.as_default():
+        # ---- Нормы весов по слоям ----
+        for layer in model.layers:
             if hasattr(layer, "kernel"):
-                weights = layer.kernel.numpy().flatten()
-                plt.figure(figsize=(12, 6))
-                plt.hist(weights, bins=100)
-                plt.title(f"Layer {i} Weight Distribution")
-                plt.xlabel("Weight value")
-                plt.ylabel("Frequency")
-                plt.savefig(config["reports"]["figures_path"] + f"ann_weights_layer_{i}.png")
-                plt.close()
-        
-        tf.keras.utils.plot_model(
-            model,
-            to_file=config["reports"]["figures_path"] + "ann_model_graph.png",
-            show_shapes=True,
-            show_layer_names=True,
-            dpi=300
-        )
+                weights = layer.kernel
+                weight_norm = tf.norm(weights)
+                tf.summary.scalar(f"weights_norm/{layer.name}", weight_norm, step=0)
+                tf.summary.histogram(f"weights_hist/{layer.name}", weights, step=0)
 
-        with tf.summary.create_file_writer(log_dir).as_default():
-            tf.summary.trace_export(
-                name="ANN_graph_trace",
-                step=0,
-                profiler_outdir=log_dir
-            )
-        
-        writer = tf.summary.create_file_writer(log_dir)
-
-        with writer.as_default():
-
-            # ---- 1. Скаляры теста (в исходной шкале) ----
-            tf.summary.scalar("test/RMSE_original", metrics["rmse"], step=0)
-            tf.summary.scalar("test/MAE_original", metrics["mae"], step=0)
-            tf.summary.scalar("test/R2_original", metrics["r2"], step=0)
-
-            # ---- 2. Распределение ошибок ----
-            errors = y_test.values - y_pred
-            tf.summary.histogram("test/error_distribution", errors, step=0)
-
-            # ---- 3. Распределение предсказаний ----
-            tf.summary.histogram("test/y_pred_distribution", y_pred, step=0)
-            tf.summary.histogram("test/y_true_distribution", y_test.values, step=0)
-
-            # ---- 4. Нормы весов по слоям ----
-            for layer in model.layers:
-                if hasattr(layer, "kernel"):
-                    weights = layer.kernel
-                    weight_norm = tf.norm(weights)
-                    tf.summary.scalar(f"weights_norm/{layer.name}", weight_norm, step=0)
-                    tf.summary.histogram(f"weights_hist/{layer.name}", weights, step=0)
-
-            writer.flush()
+        writer.flush()
 
     # Save Model
     os.makedirs(config["models"]["models_path"], exist_ok=True)
@@ -199,24 +163,6 @@ def create_ann_model(
 
     return model
 
-def load_data(
-    train_path: str,
-    test_path: str,
-    target_column: str
-) -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series]:
-    """
-    Load train and test datasets.
-    """
-    train_df = pd.read_csv(train_path)
-    test_df = pd.read_csv(test_path)
-
-    x_train = train_df.drop(columns=[target_column])
-    y_train = train_df[target_column]
-
-    x_test= test_df.drop(columns=[target_column])
-    y_test = test_df[target_column]
-
-    return x_train, y_train, x_test, y_test
 
 def create_tf_dataset(
     x_train: np.ndarray,
@@ -249,19 +195,6 @@ def create_tf_dataset(
               .prefetch(tf.data.AUTOTUNE))
 
     return train_ds, val_ds
-
-def compute_metrics(
-    y_true: np.ndarray,
-    y_pred: np.ndarray
-) -> Dict[str, float]:
-    """
-    Compute regression metrics.
-    """
-    return {
-        "rmse": float(root_mean_squared_error(y_true, y_pred)),
-        "mae": float(mean_absolute_error(y_true, y_pred)),
-        "r2": float(r2_score(y_true, y_pred))
-    }
 
 if __name__ == "__main__":
     main()

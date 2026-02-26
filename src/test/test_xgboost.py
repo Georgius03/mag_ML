@@ -4,11 +4,10 @@ import numpy as np
 
 from typing import Tuple, Dict
 from xgboost import XGBRegressor
-from sklearn.metrics import root_mean_squared_error, mean_absolute_error, r2_score
-import matplotlib.pyplot as plt
 from dvclive import Live
 
 from src.test.test_utils import load_data, compute_metrics
+
 
 def main() -> None:
 
@@ -17,29 +16,16 @@ def main() -> None:
         config = yaml.safe_load(config_file)
 
     # Load data
-    x_train, y_train, x_test, y_test = load_data(
-        train_path=config["data"]["train_path"],
+    x_test, y_test = load_data(
         test_path=config["data"]["test_path"],
         target_column=config["data"]["target_column"]
     )
 
-    y_train_log = np.log1p(y_train)
-
-    # Load model params
-    params = config['models']['xgboost']
-    
-    # Initialize model
-    model = XGBRegressor(**params)
+    # Load model
+    model = XGBRegressor()
+    model.load_model(config['models']['models_path'] + "xgboost.json")
 
     with Live(dir="dvclive/xgboost", save_dvc_exp=True) as live:
-
-        # Log parameters
-        # live.log_param("model", "XGBRegressor")
-        # for param, value in params.items():
-        #     live.log_param(param, value)
-
-        # Train
-        model.fit(x_train, y_train_log)
 
         # Predict
         y_pred = np.expm1(model.predict(x_test))   # inverse log transform
@@ -49,17 +35,6 @@ def main() -> None:
 
         for metric, value in metrics.items():
             live.log_metric(f"test/{metric}", value)
-
-        # Save importances plot
-        importance = model.feature_importances_
-        os.makedirs("reports/figures", exist_ok=True)
-        plt.bar(range(len(importance)), importance)
-        plt.savefig(config["reports"]["figures_path"] + "xgboost_feature_importance.png")
-        plt.close()
-
-    # Save model
-    os.makedirs(config["models"]["models_path"], exist_ok=True)
-    model.save_model(config["models"]["models_path"] + "xgboost.json")
 
 
 if __name__ == "__main__":

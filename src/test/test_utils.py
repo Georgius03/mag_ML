@@ -1,6 +1,9 @@
+import joblib, os, yaml, json
 import pandas as pd
 import numpy as np
 
+import tensorflow as tf
+from catboost import CatBoostRegressor
 from sklearn.metrics import root_mean_squared_error, mean_absolute_error, r2_score
 from typing import Tuple, Dict
 
@@ -18,20 +21,23 @@ def compute_metrics(
     }
 
 def load_data(
-    train_path: str,
     test_path: str,
     target_column: str
 ) -> Tuple[pd.DataFrame, pd.Series, pd.DataFrame, pd.Series]:
     """
-    Load train and test datasets.
+    Load test dataset.
     """
-    train_df = pd.read_csv(train_path)
     test_df = pd.read_csv(test_path)
-
-    x_train = train_df.drop(columns=[target_column])
-    y_train = train_df[target_column]
 
     x_test = test_df.drop(columns=[target_column])
     y_test = test_df[target_column]
 
-    return x_train, y_train, x_test, y_test
+    return x_test, y_test
+
+def load_pickle_model(model_path: str):
+    return joblib.load(model_path)
+
+
+def load_keras(model_path: str):
+    return tf.keras.models.load_model(model_path)
+

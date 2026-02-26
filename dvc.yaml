@@ -31,7 +31,7 @@ stages:
     - models/linear.pkl
     - reports/figures/linear_coefficients.png
     - reports/linear_coefficients.json
-  
+
   train_decision_tree:
     cmd: python src/models/train_decision_tree.py
     deps:
@@ -92,7 +92,7 @@ stages:
     - reports/figures/ann_weights_layer_2.png
     - reports/figures/ann_weights_layer_3.png
 
-    
+
   # ================================ Train stages ================================
   test_linear:
     cmd: python src/test/test_linear.py
@@ -157,7 +157,7 @@ stages:
     - dvclive/xgboost/metrics.json
     plots:
     - dvclive/xgboost/plots
-    
+
   test_ann:
     cmd: python src/test/test_ann.py
     deps:

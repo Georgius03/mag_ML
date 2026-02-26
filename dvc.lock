@@ -56,11 +56,6 @@ stages:
   train_linear:
     cmd: python src/models/train_linear.py
     deps:
-    - path: data/processed/test.csv
-      hash: md5
-      md5: e2e4a886b947647f0bc0e53783437382
-      size: 20469
-      isexec: true
     - path: data/processed/train.csv
       hash: md5
       md5: b0affc53ed388acdce2e337ac6d84beb
@@ -68,8 +63,253 @@ stages:
       isexec: true
     - path: src/models/train_linear.py
       hash: md5
-      md5: 462de142b6abfcd6df18ddc78f289760
-      size: 3206
+      md5: bd9be9fab651e56776debaf3d74bc0f0
+      size: 1788
+      isexec: true
+    - path: src/models/train_utils.py
+      hash: md5
+      md5: e6ebea4abf2da44d505371773ad34697
+      size: 392
+      isexec: true
+    params:
+      config/params.yaml:
+        base:
+          random_state: 42
+          test_size: 0.2
+          root_project_dir: /mnt/c/Jupyter-projects/mag_ML
+        models.linear:
+          n_jobs:
+    outs:
+    - path: models/linear.pkl
+      hash: md5
+      md5: b2f7766550a9deacf08791bee12a1d6a
+      size: 1201
+      isexec: true
+    - path: reports/figures/linear_coefficients.png
+      hash: md5
+      md5: 0366afbe3875c059c6374a48df619ccf
+      size: 25707
+      isexec: true
+    - path: reports/linear_coefficients.json
+      hash: md5
+      md5: e234bab51ad094197d711b3e54dec431
+      size: 394
+      isexec: true
+  train_decision_tree:
+    cmd: python src/models/train_decision_tree.py
+    deps:
+    - path: data/processed/train.csv
+      hash: md5
+      md5: b0affc53ed388acdce2e337ac6d84beb
+      size: 81353
+      isexec: true
+    - path: src/models/train_decision_tree.py
+      hash: md5
+      md5: a3b0ac321eb1faabeee4c93bbe690207
+      size: 1337
+      isexec: true
+    - path: src/models/train_utils.py
+      hash: md5
+      md5: e6ebea4abf2da44d505371773ad34697
+      size: 392
+      isexec: true
+    params:
+      config/params.yaml:
+        base:
+          random_state: 42
+          test_size: 0.2
+          root_project_dir: /mnt/c/Jupyter-projects/mag_ML
+        models.decision_tree:
+          criterion: squared_error
+          max_depth: 10
+          min_samples_split: 2
+          min_samples_leaf: 3
+          random_state: 42
+    outs:
+    - path: models/decision_tree.pkl
+      hash: md5
+      md5: a7a72f7cb38f3cbcef58d4929d9e6f98
+      size: 33409
+      isexec: true
+    - path: reports/figures/decision_tree_structure.png
+      hash: md5
+      md5: 9f5da601823c04319f74d5a6b73c9f42
+      size: 53426
+      isexec: true
+  train_catboost:
+    cmd: python src/models/train_catboost.py
+    deps:
+    - path: data/processed/train.csv
+      hash: md5
+      md5: b0affc53ed388acdce2e337ac6d84beb
+      size: 81353
+      isexec: true
+    - path: src/models/train_catboost.py
+      hash: md5
+      md5: 57fd9b2058f712a876350ed157cd3b4f
+      size: 1642
+      isexec: true
+    - path: src/models/train_utils.py
+      hash: md5
+      md5: e6ebea4abf2da44d505371773ad34697
+      size: 392
+      isexec: true
+    params:
+      config/params.yaml:
+        base:
+          random_state: 42
+          test_size: 0.2
+          root_project_dir: /mnt/c/Jupyter-projects/mag_ML
+        models.catboost:
+          iterations: 300
+          depth: 4
+          learning_rate: 0.05
+          loss_function: RMSE
+          verbose: false
+          random_seed: 42
+    outs:
+    - path: models/catboost.cbm
+      hash: md5
+      md5: b8dc4bf403464d50f8f7b4270c6a69a6
+      size: 104392
+      isexec: true
+    - path: reports/figures/catboost_feature_importance.png
+      hash: md5
+      md5: c87f9bd12fd7ffb1d3925ec7a6db543a
+      size: 8143
+      isexec: true
+  train_xgboost:
+    cmd: python src/models/train_xgboost.py
+    deps:
+    - path: data/processed/train.csv
+      hash: md5
+      md5: b0affc53ed388acdce2e337ac6d84beb
+      size: 81353
+      isexec: true
+    - path: src/models/train_utils.py
+      hash: md5
+      md5: e6ebea4abf2da44d505371773ad34697
+      size: 392
+      isexec: true
+    - path: src/models/train_xgboost.py
+      hash: md5
+      md5: 15e61704df8b285bdf37ac6b90f7a70d
+      size: 1292
+      isexec: true
+    params:
+      config/params.yaml:
+        base:
+          random_state: 42
+          test_size: 0.2
+          root_project_dir: /mnt/c/Jupyter-projects/mag_ML
+        models.xgboost:
+          n_estimators: 200
+          learning_rate: 0.05
+          max_depth: 10
+          subsample: 0.8
+          colsample_bytree: 0.75
+          random_state: 42
+    outs:
+    - path: models/xgboost.json
+      hash: md5
+      md5: e73ee574f64143572a02e081889c0f95
+      size: 2489488
+      isexec: true
+    - path: reports/figures/xgboost_feature_importance.png
+      hash: md5
+      md5: f533d3ff836228132f5ccf8210643b2a
+      size: 9131
+      isexec: true
+  train_ann:
+    cmd: python src/models/train_ann.py
+    deps:
+    - path: data/processed/train.csv
+      hash: md5
+      md5: b0affc53ed388acdce2e337ac6d84beb
+      size: 81353
+      isexec: true
+    - path: src/models/train_ann.py
+      hash: md5
+      md5: b05f928c923ad564717d3ac88d7703ac
+      size: 6357
+      isexec: true
+    - path: src/models/train_utils.py
+      hash: md5
+      md5: e6ebea4abf2da44d505371773ad34697
+      size: 392
+      isexec: true
+    params:
+      config/params.yaml:
+        base:
+          random_state: 42
+          test_size: 0.2
+          root_project_dir: /mnt/c/Jupyter-projects/mag_ML
+        models.ann:
+          dataset_params:
+            validation_split: 0.2
+            batch_size: 16
+            random_state: 42
+          model_params:
+            n_hidden_layers: 4
+            n_neurons: 32
+            activation: tanh
+            learning_rate: 0.001
+          train_params:
+            epochs: 100
+            verbose: 0
+    outs:
+    - path: models/ann.keras
+      hash: md5
+      md5: 451b41443d2d82dcb1bbcd3f45647afb
+      size: 81772
+      isexec: true
+    - path: reports/figures/ann_loss_curve.png
+      hash: md5
+      md5: 4388c10f3679b0fa0258982d062ac631
+      size: 20412
+      isexec: true
+    - path: reports/figures/ann_model_graph.png
+      hash: md5
+      md5: 08582b462246681326b075a29bb978ba
+      size: 250619
+      isexec: true
+    - path: reports/figures/ann_weights_layer_1.png
+      hash: md5
+      md5: 51e4325990dda47ef06421e23c3f733f
+      size: 18089
+      isexec: true
+    - path: reports/figures/ann_weights_layer_2.png
+      hash: md5
+      md5: 155c1ec924a66f0d4b9bd206443b68d9
+      size: 20249
+      isexec: true
+    - path: reports/figures/ann_weights_layer_3.png
+      hash: md5
+      md5: a77300f2931aebc70e42dc195471f101
+      size: 18815
+      isexec: true
+  test_linear:
+    cmd: python src/test/test_linear.py
+    deps:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: e2e4a886b947647f0bc0e53783437382
+      size: 20469
+      isexec: true
+    - path: models/linear.pkl
+      hash: md5
+      md5: b2f7766550a9deacf08791bee12a1d6a
+      size: 1201
+      isexec: true
+    - path: src/test/test_linear.py
+      hash: md5
+      md5: e5b8f54242202a1d3bdfe60393e47e14
+      size: 992
+      isexec: true
+    - path: src/test/test_utils.py
+      hash: md5
+      md5: 9f0ada9ec09cc39bc2349fae9eb0eefb
+      size: 825
       isexec: true
     params:
       config/params.yaml:
@@ -90,38 +330,28 @@ stages:
       md5: d235a1c9355d09642c895cd3145c72a1.dir
       size: 88
       nfiles: 3
-    - path: models/linear.pkl
-      hash: md5
-      md5: b2f7766550a9deacf08791bee12a1d6a
-      size: 1201
-      isexec: true
-    - path: reports/figures/linear_coefficients.png
-      hash: md5
-      md5: 0366afbe3875c059c6374a48df619ccf
-      size: 25707
-      isexec: true
-    - path: reports/linear_coefficients.json
-      hash: md5
-      md5: e234bab51ad094197d711b3e54dec431
-      size: 394
-      isexec: true
-  train_decision_tree:
-    cmd: python src/models/train_decision_tree.py
+  test_decision_tree:
+    cmd: python src/test/test_decision_tree.py
     deps:
     - path: data/processed/test.csv
       hash: md5
       md5: e2e4a886b947647f0bc0e53783437382
       size: 20469
       isexec: true
-    - path: data/processed/train.csv
+    - path: models/decision_tree.pkl
       hash: md5
-      md5: b0affc53ed388acdce2e337ac6d84beb
-      size: 81353
+      md5: a7a72f7cb38f3cbcef58d4929d9e6f98
+      size: 33409
       isexec: true
-    - path: src/models/train_decision_tree.py
+    - path: src/test/test_decision_tree.py
       hash: md5
-      md5: 5398c9813c471aff024c55366b25e793
-      size: 2727
+      md5: 56411f57b438feffe89c12cc4e72b749
+      size: 1003
+      isexec: true
+    - path: src/test/test_utils.py
+      hash: md5
+      md5: 9f0ada9ec09cc39bc2349fae9eb0eefb
+      size: 825
       isexec: true
     params:
       config/params.yaml:
@@ -146,33 +376,28 @@ stages:
       md5: 4861b86bf5a4f7014270b7ba570919d2.dir
       size: 89
       nfiles: 3
-    - path: models/decision_tree.pkl
-      hash: md5
-      md5: a7a72f7cb38f3cbcef58d4929d9e6f98
-      size: 33409
-      isexec: true
-    - path: reports/figures/decision_tree_structure.png
-      hash: md5
-      md5: 9f5da601823c04319f74d5a6b73c9f42
-      size: 53426
-      isexec: true
-  train_catboost:
-    cmd: python src/models/train_catboost.py
+  test_catboost:
+    cmd: python src/test/test_catboost.py
     deps:
     - path: data/processed/test.csv
       hash: md5
       md5: e2e4a886b947647f0bc0e53783437382
       size: 20469
       isexec: true
-    - path: data/processed/train.csv
+    - path: models/catboost.cbm
       hash: md5
-      md5: b0affc53ed388acdce2e337ac6d84beb
-      size: 81353
+      md5: b8dc4bf403464d50f8f7b4270c6a69a6
+      size: 104392
       isexec: true
-    - path: src/models/train_catboost.py
+    - path: src/test/test_catboost.py
       hash: md5
-      md5: b27026a2cc8fbb73afd8e28e4716c5ea
-      size: 2686
+      md5: 9a89fdcf1075fbb5311ce19d78a2fe51
+      size: 1013
+      isexec: true
+    - path: src/test/test_utils.py
+      hash: md5
+      md5: 9f0ada9ec09cc39bc2349fae9eb0eefb
+      size: 825
       isexec: true
     params:
       config/params.yaml:
@@ -198,33 +423,28 @@ stages:
       md5: 818981007eb466ce0efc3c768b9ebbac.dir
       size: 87
       nfiles: 3
-    - path: models/catboost.cbm
-      hash: md5
-      md5: 732ad72acb7eba3a76de66ee26192d2b
-      size: 104392
-      isexec: true
-    - path: reports/figures/catboost_feature_importance.png
-      hash: md5
-      md5: c87f9bd12fd7ffb1d3925ec7a6db543a
-      size: 8143
-      isexec: true
-  train_xgboost:
-    cmd: python src/models/train_xgboost.py
+  test_xgboost:
+    cmd: python src/test/test_xgboost.py
     deps:
     - path: data/processed/test.csv
       hash: md5
       md5: e2e4a886b947647f0bc0e53783437382
       size: 20469
       isexec: true
-    - path: data/processed/train.csv
+    - path: models/xgboost.json
       hash: md5
-      md5: b0affc53ed388acdce2e337ac6d84beb
-      size: 81353
+      md5: e73ee574f64143572a02e081889c0f95
+      size: 2489488
       isexec: true
-    - path: src/models/train_xgboost.py
+    - path: src/test/test_utils.py
       hash: md5
-      md5: 149de9700db84e168b4b6bd01673f54a
-      size: 2663
+      md5: 9f0ada9ec09cc39bc2349fae9eb0eefb
+      size: 825
+      isexec: true
+    - path: src/test/test_xgboost.py
+      hash: md5
+      md5: a75d09d240735afbaf968e987f92744f
+      size: 1007
       isexec: true
     params:
       config/params.yaml:
@@ -250,33 +470,28 @@ stages:
       md5: 33ef9b1efdec2ca4a7558ba4d5476643.dir
       size: 89
       nfiles: 3
-    - path: models/xgboost.json
-      hash: md5
-      md5: e73ee574f64143572a02e081889c0f95
-      size: 2489488
-      isexec: true
-    - path: reports/figures/xgboost_feature_importance.png
-      hash: md5
-      md5: f533d3ff836228132f5ccf8210643b2a
-      size: 9131
-      isexec: true
-  train_ann:
-    cmd: python src/models/train_ann.py
+  test_ann:
+    cmd: python src/test/test_ann.py
     deps:
     - path: data/processed/test.csv
       hash: md5
       md5: e2e4a886b947647f0bc0e53783437382
       size: 20469
       isexec: true
-    - path: data/processed/train.csv
+    - path: models/ann.keras
       hash: md5
-      md5: b0affc53ed388acdce2e337ac6d84beb
-      size: 81353
+      md5: 451b41443d2d82dcb1bbcd3f45647afb
+      size: 81772
       isexec: true
-    - path: src/models/train_ann.py
+    - path: src/test/test_ann.py
       hash: md5
-      md5: daf04a494a808749258511b0d20be1d7
-      size: 8944
+      md5: fa6bdbde3dd4721d59b2ecb087ee682d
+      size: 1011
+      isexec: true
+    - path: src/test/test_utils.py
+      hash: md5
+      md5: 9f0ada9ec09cc39bc2349fae9eb0eefb
+      size: 825
       isexec: true
     params:
       config/params.yaml:
@@ -300,41 +515,11 @@ stages:
     outs:
     - path: dvclive/ann/metrics.json
       hash: md5
-      md5: 51490f84d9e78d41d0213fecfaf7d3a2
-      size: 126
+      md5: 0ed60a9a5d672f0c9aaaeee44b49f28a
+      size: 127
       isexec: true
     - path: dvclive/ann/plots
       hash: md5
-      md5: 0c35d086cfa338c5cb1cb21a3b9949bf.dir
-      size: 88
+      md5: ce745a1bbb7bc96a8bd16791f2585f9a.dir
+      size: 89
       nfiles: 3
-    - path: models/ann.keras
-      hash: md5
-      md5: 02421d4e898858173241fe1edf417d01
-      size: 81772
-      isexec: true
-    - path: reports/figures/ann_loss_curve.png
-      hash: md5
-      md5: f80163311b4ceb7d45a482e76b83adfb
-      size: 22776
-      isexec: true
-    - path: reports/figures/ann_model_graph.png
-      hash: md5
-      md5: 08582b462246681326b075a29bb978ba
-      size: 250619
-      isexec: true
-    - path: reports/figures/ann_weights_layer_1.png
-      hash: md5
-      md5: 3cd66c1facd40c7252e5707578d54716
-      size: 17782
-      isexec: true
-    - path: reports/figures/ann_weights_layer_2.png
-      hash: md5
-      md5: 3e6015ec4890185160c467fad0b53f91
-      size: 18502
-      isexec: true
-    - path: reports/figures/ann_weights_layer_3.png
-      hash: md5
-      md5: f20b79f185a62336c8419a8ec9091290
-      size: 18524
-      isexec: true

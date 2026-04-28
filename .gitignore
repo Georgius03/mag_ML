@@ -1,0 +1,9 @@
+.venv
+.env
+
+
+test/
+data/prepared
+backups/
+description/
+**/__pycache__/
